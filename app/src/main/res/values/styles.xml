@@ -7,4 +7,10 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="TextViewStyle" parent="TextAppearance.AppCompat">
+        <item name="android:textColor">#3C3838</item>
+        <item name="fontFamily">@font/asap</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
 </resources>
