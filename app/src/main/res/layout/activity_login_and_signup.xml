@@ -54,11 +54,12 @@
             android:text="Username"
             style="@style/TextViewStyle"
             android:layout_weight="1"
-            android:textSize="20sp"/>
+            android:textSize="14sp"/>
 
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="#000000"
             style="@style/TextViewStyle"
             android:textSize="20sp"
             android:layout_weight="1" />
@@ -82,11 +83,12 @@
             android:text="Password"
             android:layout_weight="1"
             style="@style/TextViewStyle"
-            android:textSize="20sp"/>
+            android:textSize="14sp"/>
 
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="#000000"
             style="@style/TextViewStyle"
             android:textSize="20sp"
             android:inputType="textPassword"
@@ -101,9 +103,13 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingVertical="8dp"
-        android:paddingHorizontal="5dp"
-        android:text="Log in"
+        android:paddingVertical="2dp"
+        android:paddingHorizontal="2dp"
+        android:text="          Log in          "
+        android:textSize="18sp"
+        android:textAllCaps="false"
+        android:textColor="#FFFFFF"
+        android:background="@drawable/button_effect"
         style="@style/TextViewStyle"
         android:layout_gravity="center_horizontal" />
 
