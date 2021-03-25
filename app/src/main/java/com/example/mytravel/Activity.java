@@ -5,7 +5,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 
-public class MainActivity extends AppCompatActivity {
+import com.google.firebase.database.FirebaseDatabase;
+
+public class Activity extends AppCompatActivity
+{
+
+    protected FirebaseDatabase db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -13,8 +18,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Opening login and sign up screen
-        Intent intent = new Intent(this, LoginAndSignup.class);
-        startActivity(intent);
+        db = FirebaseDatabase.getInstance();
     }
 }
