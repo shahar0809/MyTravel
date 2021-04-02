@@ -10,12 +10,12 @@ import com.google.firebase.database.ValueEventListener;
 
 public class FirebaseMethods
 {
-    public void generateUser(String username, String password, String email)
+    public void generateUser(String username, String email)
     {
         Log.d("firebase", "in gen");
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference users = database.getReference("Users");
-        User user = new User(username, password, email);
+        User user = new User(username, email);
         users.push().setValue(user);
     }
 

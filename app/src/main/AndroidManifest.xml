@@ -21,8 +21,16 @@
         <activity android:name=".Activity"></activity>
 
         <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyAlDDdTSG3L-pZlaQb6Awj8HqiJTr5-sP0" />
+
+        <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
     </application>
+
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
 </manifest>

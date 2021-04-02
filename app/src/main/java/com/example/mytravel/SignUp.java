@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -93,9 +94,10 @@ public class SignUp extends Activity
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task)
                     {
+                        //Log.i("error is :", task.getException().getMessage());
                         Toast.makeText(SignUp.this, "createUserWithEmail:onComplete:" + task.isSuccessful(), Toast.LENGTH_SHORT).show();
                         dialog.dismiss();
-                        firebaseMethods.generateUser(username_str, password_str, email_str);
+                        firebaseMethods.generateUser(username_str, email_str);
 
                         if (!task.isSuccessful()) {
                             dialog.dismiss();
