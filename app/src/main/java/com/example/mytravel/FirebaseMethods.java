@@ -19,4 +19,11 @@ public class FirebaseMethods
         users.push().setValue(user);
     }
 
+    public void generatePost(Post post)
+    {
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference posts = database.getReference("Posts");
+        posts.push().setValue(post);
+    }
+
 }

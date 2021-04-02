@@ -2,7 +2,7 @@
     <item android:id="@+id/action_settings"
         android:title="Settings"
         android:icon="@drawable/settings_icon_selector" />
-    <item android:id="@+id/action_navigation"
+    <item android:id="@+id/action_favorites"
         android:title="Favorites"
         android:icon="@drawable/favorites_icon_selector" />
 </menu>

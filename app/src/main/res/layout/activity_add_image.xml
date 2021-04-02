@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".AddImage">
+
+    <TextView
+        android:text="New post"
+        android:textSize="48sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingVertical="2dp"
+        android:paddingHorizontal="2dp"
+        android:text="        Choose image        "
+        android:textSize="18sp"
+        android:textAllCaps="false"
+        android:textColor="#FFFFFF"
+        android:background="@drawable/button_effect"
+        style="@style/TextViewStyle"
+        android:onClick="chooseImage"
+        android:layout_gravity="center_horizontal" />
+
+
+</LinearLayout>
