@@ -8,14 +8,26 @@ public class Post
 {
     LatLng location;
     String description;
-    Bitmap image;
+    String name;
     User owner;
+
+    public Post() {}
+
+    public String getName() { return name; }
+
+    public void setName(String name) { this.name = name; }
+
+    public Post(LatLng location, String desc, String name, User owner)
+    {
+        this.location = location;
+        this.description = desc;
+        this.name = name;
+        this.owner = owner;
+    }
 
     public LatLng getLocation() { return location; }
 
     public void setLocation(LatLng location) { this.location = location; }
-
-    public Bitmap getImage() { return image; }
 
     public User getOwner() { return owner; }
 

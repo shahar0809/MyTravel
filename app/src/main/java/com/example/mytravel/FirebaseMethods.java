@@ -19,11 +19,12 @@ public class FirebaseMethods
         users.push().setValue(user);
     }
 
-    public void generatePost(Post post)
+    public static void generatePost(Post post)
     {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference posts = database.getReference("Posts");
-        posts.push().setValue(post);
+        DatabaseReference userRef = posts.child(post.getOwner().getUsername());
+        userRef.push().setValue(post);
     }
 
 }

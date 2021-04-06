@@ -7,6 +7,15 @@
     tools:context=".MainApp">
 
     <fragment
+        android:id="@+id/autocomplete_fragment"
+        android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <fragment
         android:id="@+id/map"
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
@@ -55,7 +64,6 @@
             app:fabSize="normal"
             app:backgroundTint="@color/light_purple"
             app:rippleColor="@color/dark_purple"
-
             app:layout_anchor="@id/bottomBar" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
