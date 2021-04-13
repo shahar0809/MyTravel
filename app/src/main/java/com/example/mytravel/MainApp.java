@@ -10,9 +10,11 @@ import android.location.Address;
 import android.location.Criteria;
 import android.location.Geocoder;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -66,6 +68,7 @@ public class MainApp extends AppCompatActivity implements OnMapReadyCallback, Vi
     SupportMapFragment mapFragment;
     GoogleMap mMap;
     User user;
+    Post currPost;
     LatLng postLocation;
     HashMap<Post, Marker> posts = new HashMap<Post, Marker>();
     Marker userMarker;
@@ -82,7 +85,7 @@ public class MainApp extends AppCompatActivity implements OnMapReadyCallback, Vi
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(this);
-        //getImages();
+        getImages();
 
         // Requesting location permissions
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -158,18 +161,29 @@ public class MainApp extends AppCompatActivity implements OnMapReadyCallback, Vi
 
     public void getImages()
     {
+
+        // Getting
         FirebaseDatabase mFirebaseDatabase = FirebaseDatabase.getInstance();
         DatabaseReference databaseReference = mFirebaseDatabase.getReference("Posts");
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot childDataSnapshot : dataSnapshot.getChildren()) {
                     if (dataSnapshot.getChildrenCount() > 0)
                     {
                         for (DataSnapshot postSnapshot : childDataSnapshot.getChildren()) {
-                            Post post = postSnapshot.getValue(Post.class);
-                            assert post != null;
-                            posts.put(post, addMarker(post));
+                            // Constructing all parameters of post
+                            String name = postSnapshot.child("name").getValue(String.class);
+                            String description = postSnapshot.child("description").getValue(String.class);
+                            User owner = postSnapshot.child("owner").getValue(User.class);
+                            String latitude = postSnapshot.child("location").child("latitude").getValue().toString();
+                            String longitude = postSnapshot.child("location").child("longitude").getValue().toString();
+
+                            LatLng location = new LatLng(Double.parseDouble(latitude), Double.parseDouble(longitude));
+                            Uri imageLink = Uri.parse(postSnapshot.child("imageLink").getValue(String.class));
+
+                            assert imageLink != null;
+                            currPost = new Post(location, description, name, owner, imageLink.toString());
                         }
                     }
                 }
@@ -181,7 +195,6 @@ public class MainApp extends AppCompatActivity implements OnMapReadyCallback, Vi
         });
     }
 
-    @Override
     public void onMapClick(final LatLng clickCoords) {
         if (clickCoords != null)
         {

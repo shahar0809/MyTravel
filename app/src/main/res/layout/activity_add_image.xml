@@ -92,13 +92,4 @@
             style="@style/TextViewStyle"
             android:onClick="post" />
     </LinearLayout>
-
-
-
-
-
-
-
-
-
 </LinearLayout>

@@ -12,7 +12,11 @@ public class User implements Parcelable {
 
     /* Empty c'tor for firebase */
     public User() {}
-
+    /*
+        if (you.isReading.this){
+        you.setThis(Really.Dumb)
+        }
+    */
     public User(String username, String email)
     {
         this.username = username;

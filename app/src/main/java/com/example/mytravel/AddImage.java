@@ -39,6 +39,7 @@ public class AddImage extends AppCompatActivity {
     private LatLng postLocation;
     AlertDialog dialog;
     Post post;
+    Uri imageLink;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,17 +70,14 @@ public class AddImage extends AppCompatActivity {
     public void post(View view)
     {
         dialog.show();
-        post = new Post(this.postLocation, this.description.getText().toString(),
-                this.name.getText().toString(), this.user);
-        PostWithImage fullPost = new PostWithImage(post, this.image);
 
         /* Upload image to storage */
         String postName = this.user.getUsername() + "~" + this.name.getText().toString();
         FirebaseStorage storage = FirebaseStorage.getInstance();
         // Create a storage reference from our app
-        StorageReference userRef = storage.getReference().child("Users").child(this.user.getUsername()).child(postName);
+        final StorageReference userRef = storage.getReference().child("Users").child(this.user.getUsername()).child(postName);
 
-        Bitmap bitmap = fullPost.getImage();
+        Bitmap bitmap = this.image;
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         byte[] data = baos.toByteArray();
@@ -94,9 +92,19 @@ public class AddImage extends AppCompatActivity {
         }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                FirebaseMethods.generatePost(post);
-                dialog.dismiss();
-                finish();
+                userRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>()
+                  {
+                      @Override
+                      public void onSuccess(Uri uri) {
+                          imageLink = uri;
+                          Toast.makeText(AddImage.this, "Post is up!", Toast.LENGTH_LONG).show();
+                          post = new Post(postLocation, description.getText().toString(),
+                                  name.getText().toString(), user, imageLink);
+                          FirebaseMethods.generatePost(post);
+                          dialog.dismiss();
+                          finish();
+                      }
+                  });
             }
         });
     }
