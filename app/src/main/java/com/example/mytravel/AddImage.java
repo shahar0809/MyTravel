@@ -102,6 +102,7 @@ public class AddImage extends AppCompatActivity {
                                   name.getText().toString(), user, imageLink);
                           FirebaseMethods.generatePost(post);
                           dialog.dismiss();
+                          setResult(RESULT_OK);
                           finish();
                       }
                   });
@@ -130,5 +131,10 @@ public class AddImage extends AppCompatActivity {
                 }
             }
         }
+    }
+
+    public void goBack(View view) {
+        setResult(RESULT_OK + 1);
+        finish();
     }
 }

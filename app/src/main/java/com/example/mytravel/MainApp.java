@@ -1,28 +1,28 @@
 package com.example.mytravel;
 
 import android.Manifest;
+import android.app.AlertDialog;
+import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
-import android.location.Address;
 import android.location.Criteria;
-import android.location.Geocoder;
 import android.location.LocationManager;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.location.Location;
-import android.os.Bundle;
+import android.os.IBinder;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -31,8 +31,6 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.google.android.gms.common.api.Status;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -47,31 +45,37 @@ import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.firebase.FirebaseError;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.database.annotations.NotNull;
+import com.google.maps.android.clustering.Cluster;
+import com.google.maps.android.clustering.ClusterItem;
+import com.google.maps.android.clustering.ClusterManager;
+import com.google.maps.android.clustering.view.DefaultClusterRenderer;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
+import java.util.LinkedList;
+import java.util.Queue;
 
 public class MainApp extends AppCompatActivity implements OnMapReadyCallback, View.OnClickListener,
         PlaceSelectionListener, GoogleMap.OnMapClickListener {
 
-    final static int REQUEST_LOC_PERMISSIONS = 5;
+    final static int REQUEST_LOC_PERMISSIONS = 5, ADD_POST = 6;
 
     SupportMapFragment mapFragment;
     GoogleMap mMap;
     User user;
     Post currPost;
+    ArrayList<Post> posts = new ArrayList<Post>();
     LatLng postLocation;
-    HashMap<Post, Marker> posts = new HashMap<Post, Marker>();
     Marker userMarker;
+    ClusterManager<Post> mClusterManager;
+    AlertDialog dialog;
+    public static Queue<Post> postsQueue = new LinkedList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,22 +83,25 @@ public class MainApp extends AppCompatActivity implements OnMapReadyCallback, Vi
         setContentView(R.layout.activity_main_app);
         Places.initialize(getApplicationContext(), "@string/API_KEY");
 
+        /* User loading dialog */
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainApp.this);
+        builder.setCancelable(false);
+        builder.setView(R.layout.user_dialog);
+        dialog = builder.create();
+        dialog.show();
+
         // Getting user from intent extras
         Intent intent = getIntent();
         this.user = (User) intent.getParcelableExtra("user");
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(this);
-        getImages();
 
         // Requesting location permissions
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION,
-                    android.Manifest.permission.ACCESS_COARSE_LOCATION}, REQUEST_LOC_PERMISSIONS);
-            return;
-        } else {
-            initMap();
-        }
+            requestPermissions(new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION}, REQUEST_LOC_PERMISSIONS);
+            finish();
+        } else { initMap(); }
     }
 
     protected void initMap() {
@@ -113,8 +120,6 @@ public class MainApp extends AppCompatActivity implements OnMapReadyCallback, Vi
 
         // Set up a PlaceSelectionListener to handle the response.
         autocompleteFragment.setOnPlaceSelectedListener(this);
-
-
     }
 
     @Override
@@ -157,12 +162,31 @@ public class MainApp extends AppCompatActivity implements OnMapReadyCallback, Vi
 
         assert location != null;
         zoomCamera(new LatLng(location.getLatitude(), location.getLongitude()));
+
+        /* Setting up marker clustering */
+        mClusterManager = new ClusterManager<>(this, mMap);
+        mClusterManager.setOnClusterItemClickListener(
+                new ClusterManager.OnClusterItemClickListener<Post>() {
+                    @Override public boolean onClusterItemClick(Post clusterItem) {
+                        Log.d("help", "in");
+                        Intent intent = new Intent(MainApp.this, showPost.class);
+                        intent.putExtra("user", user);
+                        intent.putExtra("post", (Post)clusterItem);
+                        startActivityForResult(intent, 5);
+                        return false;
+                    }
+                });
+
+        mMap.setOnInfoWindowClickListener(mClusterManager);
+        mMap.setInfoWindowAdapter(mClusterManager.getMarkerManager());
+        mMap.setOnMarkerClickListener(mClusterManager);
+        googleMap.setOnInfoWindowClickListener(mClusterManager);
+
+        getImages();
     }
 
     public void getImages()
     {
-
-        // Getting
         FirebaseDatabase mFirebaseDatabase = FirebaseDatabase.getInstance();
         DatabaseReference databaseReference = mFirebaseDatabase.getReference("Posts");
         databaseReference.addValueEventListener(new ValueEventListener() {
@@ -184,12 +208,17 @@ public class MainApp extends AppCompatActivity implements OnMapReadyCallback, Vi
 
                             assert imageLink != null;
                             currPost = new Post(location, description, name, owner, imageLink.toString());
+                            //postsQueue.add(currPost);
+                            addMarker(currPost);
                         }
                     }
                 }
+                mClusterManager.cluster();
+                dialog.dismiss();
+
             }
             @Override
-            public void onCancelled(DatabaseError firebaseError) {
+            public void onCancelled(@NonNull DatabaseError firebaseError) {
                 Log.e("The read failed: ", firebaseError.getMessage());
             }
         });
@@ -211,6 +240,22 @@ public class MainApp extends AppCompatActivity implements OnMapReadyCallback, Vi
                     .icon(BitmapFromVector(getApplicationContext(), R.drawable.person_pin));
 
             this.userMarker = mMap.addMarker(marker);
+        }
+    }
+
+    public void addMarker(Post post)
+    {
+        mClusterManager.addItem(post);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        dialog.show();
+        getImages();
+        if (requestCode == ADD_POST && resultCode == RESULT_OK)
+        {
+            this.userMarker.remove();
         }
     }
 
@@ -247,17 +292,6 @@ public class MainApp extends AppCompatActivity implements OnMapReadyCallback, Vi
         Toast.makeText(MainApp.this, "Error while fetching location", Toast.LENGTH_LONG).show();
     }
 
-    public Marker addMarker(Post post)
-    {
-        // Construct marker
-        MarkerOptions marker = new MarkerOptions().position(post.getLocation());
-        marker.snippet(post.getDescription());
-        marker.title(post.getOwner().getUsername());
-
-        // Add marker to map
-        return mMap.addMarker(marker);
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -283,10 +317,18 @@ public class MainApp extends AppCompatActivity implements OnMapReadyCallback, Vi
 
     public void onClick(View view)
     {
-        Intent intent = new Intent(this, AddImage.class);
-        intent.putExtra("user", user);
-        intent.putExtra("location", this.postLocation);
-        startActivity(intent);
+        if (userMarker != null)
+        {
+            Intent intent = new Intent(this, AddImage.class);
+            intent.putExtra("user", user);
+            intent.putExtra("location", this.postLocation);
+            startActivityForResult(intent, ADD_POST);
+        }
+        else
+        {
+            Toast.makeText(this, "Please select a location!", Toast.LENGTH_LONG).show();
+        }
+
     }
 
     public void viewSettings()
@@ -309,4 +351,23 @@ public class MainApp extends AppCompatActivity implements OnMapReadyCallback, Vi
         mMap.animateCamera(CameraUpdateFactory.zoomTo(15), 2000, null);
     }
 
+    private class RenderClusterInfoWindow extends DefaultClusterRenderer<Post> {
+
+        RenderClusterInfoWindow(Context context, GoogleMap map, ClusterManager<Post> clusterManager) {
+            super(context, map, clusterManager);
+        }
+
+        @Override
+        protected void onClusterRendered(Cluster<Post> cluster, Marker marker) {
+            super.onClusterRendered(cluster, marker);
+        }
+
+        @Override
+        protected void onBeforeClusterItemRendered(Post item, MarkerOptions markerOptions) {
+            markerOptions.title(item.getName());
+
+            super.onBeforeClusterItemRendered(item, markerOptions);
+        }
+    }
 }
+
