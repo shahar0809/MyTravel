@@ -119,8 +119,6 @@ public class Login extends AppCompatActivity
                             Toast.makeText(Login.this, "Auth failed", Toast.LENGTH_LONG).show();
                             dialog.dismiss();
                         } else {
-                            dialog.dismiss();
-
                             FirebaseDatabase mFirebaseDatabase = FirebaseDatabase.getInstance();
                             DatabaseReference databaseReference = mFirebaseDatabase.getReference("Users");
                             databaseReference.addValueEventListener(new ValueEventListener() {
@@ -134,10 +132,12 @@ public class Login extends AppCompatActivity
                                             username = user.getUsername();
                                         }
                                     }
+                                    dialog.dismiss();
                                 }
                                 @Override
                                 public void onCancelled(DatabaseError firebaseError) {
                                     Log.e("The read failed: ", firebaseError.getMessage());
+                                    dialog.dismiss();
                                 }
                             });
 

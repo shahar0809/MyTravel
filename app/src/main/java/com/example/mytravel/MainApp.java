@@ -160,8 +160,7 @@ public class MainApp extends AppCompatActivity implements OnMapReadyCallback, Vi
         assert provider != null;
         Location location = locationManager.getLastKnownLocation(provider);
 
-        assert location != null;
-        zoomCamera(new LatLng(location.getLatitude(), location.getLongitude()));
+        if (location != null) { zoomCamera(new LatLng(location.getLatitude(), location.getLongitude())); };
 
         /* Setting up marker clustering */
         mClusterManager = new ClusterManager<>(this, mMap);
