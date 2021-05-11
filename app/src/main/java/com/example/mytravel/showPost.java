@@ -90,5 +90,6 @@ public class showPost extends AppCompatActivity
 
     public void likePost(View view)
     {
+        //FirebaseDatabase.likePost(vie)
     }
 }

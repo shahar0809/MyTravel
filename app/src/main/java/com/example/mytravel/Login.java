@@ -116,7 +116,7 @@ public class Login extends AppCompatActivity
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (!task.isSuccessful()) {
-                            Toast.makeText(Login.this, "Auth failed", Toast.LENGTH_LONG).show();
+                            Toast.makeText(Login.this, "Authentication failed", Toast.LENGTH_LONG).show();
                             dialog.dismiss();
                         } else {
                             FirebaseDatabase mFirebaseDatabase = FirebaseDatabase.getInstance();

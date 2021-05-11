@@ -75,6 +75,7 @@ public class MainApp extends AppCompatActivity implements OnMapReadyCallback, Vi
     Marker userMarker;
     ClusterManager<Post> mClusterManager;
     AlertDialog dialog;
+    String currId;
     public static Queue<Post> postsQueue = new LinkedList<>();
 
     @Override
@@ -195,6 +196,7 @@ public class MainApp extends AppCompatActivity implements OnMapReadyCallback, Vi
                     if (dataSnapshot.getChildrenCount() > 0)
                     {
                         for (DataSnapshot postSnapshot : childDataSnapshot.getChildren()) {
+                            currId = postSnapshot.getKey();
                             // Constructing all parameters of post
                             String name = postSnapshot.child("name").getValue(String.class);
                             String description = postSnapshot.child("description").getValue(String.class);
@@ -206,7 +208,7 @@ public class MainApp extends AppCompatActivity implements OnMapReadyCallback, Vi
                             Uri imageLink = Uri.parse(postSnapshot.child("imageLink").getValue(String.class));
 
                             assert imageLink != null;
-                            currPost = new Post(location, description, name, owner, imageLink.toString());
+                            currPost = new Post(currId, location, description, name, owner, imageLink.toString());
                             //postsQueue.add(currPost);
                             addMarker(currPost);
                         }
@@ -218,7 +220,9 @@ public class MainApp extends AppCompatActivity implements OnMapReadyCallback, Vi
             }
             @Override
             public void onCancelled(@NonNull DatabaseError firebaseError) {
+                Toast.makeText(MainApp.this, "Can't load posts", Toast.LENGTH_LONG).show();
                 Log.e("The read failed: ", firebaseError.getMessage());
+                dialog.dismiss();
             }
         });
     }

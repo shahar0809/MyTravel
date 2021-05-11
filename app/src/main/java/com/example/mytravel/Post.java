@@ -13,6 +13,7 @@ public class Post implements ClusterItem, Parcelable {
     String name;
     String imageLink;
     User owner;
+    String id = "";
 
     public Post() {
     }
@@ -29,6 +30,8 @@ public class Post implements ClusterItem, Parcelable {
 
     public void setImageLink(String link) { imageLink = link; }
 
+    public String getId() { return id; };
+
     public Post(LatLng location, String desc, String name, User owner, Uri imageLink) {
         this.location = location;
         this.description = desc;
@@ -38,6 +41,15 @@ public class Post implements ClusterItem, Parcelable {
     }
 
     public Post(LatLng location, String desc, String name, User owner, String imageLink) {
+        this.location = location;
+        this.description = desc;
+        this.name = name;
+        this.owner = owner;
+        this.imageLink = imageLink;
+    }
+
+    public Post(String id, LatLng location, String desc, String name, User owner, String imageLink) {
+        this.id = id;
         this.location = location;
         this.description = desc;
         this.name = name;
