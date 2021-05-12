@@ -39,70 +39,76 @@
             android:onClick="likePost" />
     </RelativeLayout>
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-        <TextView
-            android:text="fdfd"
-            android:layout_gravity="center_horizontal"
-            android:textSize="48sp"
-            android:id="@+id/name"
-            style="@style/TextViewStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="50dp" />
-
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:scaleType="fitStart"
-            android:maxHeight="1400dp"
-            android:id="@+id/postImage"
-            />
-
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="50dp" />
-
-        <TextView
-            android:id="@+id/description"
-            android:layout_gravity="center_horizontal"
-            android:textSize="18sp"
-            style="@style/TextViewStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="50dp" />
-
+        android:layout_height="match_parent">
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:orientation="vertical">
-            <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/profileButton"
-                android:src="@drawable/account"
-                android:background="@null"
-                />
             <TextView
-                android:id="@+id/username"
+                android:text="fdfd"
                 android:layout_gravity="center_horizontal"
-                android:textSize="12sp"
+                android:textSize="48sp"
+                android:id="@+id/name"
                 style="@style/TextViewStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="50dp" />
+
+            <ImageView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:scaleType="fitStart"
+                android:adjustViewBounds="true"
+                android:id="@+id/postImage"
+                />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="50dp" />
+
+            <TextView
+                android:id="@+id/description"
+                android:layout_gravity="start"
+                android:layout_marginHorizontal="10dp"
+                android:textSize="18sp"
+                style="@style/TextViewStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="50dp" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:orientation="vertical">
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/profileButton"
+                    android:src="@drawable/account"
+                    android:layout_gravity="center_horizontal"
+                    android:background="@null"
+                    />
+                <TextView
+                    android:id="@+id/username"
+                    android:layout_gravity="center_horizontal"
+                    android:textSize="12sp"
+                    style="@style/TextViewStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="20dp" />
         </LinearLayout>
-
-
-
-    </LinearLayout>
-
+    </ScrollView>
 </LinearLayout>

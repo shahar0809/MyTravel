@@ -75,7 +75,7 @@ public class AddImage extends AppCompatActivity {
     public void chooseImage(View view)
     {
         window = new AlertDialog.Builder(this);
-        window.setTitle("Pick a phtot from:");
+        window.setTitle("Pick a photo from:");
         window.setItems(Options, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
