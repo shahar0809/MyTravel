@@ -5,12 +5,15 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
@@ -26,20 +29,28 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
+
+import static androidx.core.graphics.TypefaceCompatUtil.getTempFile;
 
 public class AddImage extends AppCompatActivity {
     EditText description, name;
-    static int REQUEST_LOCATION=5, REQUEST_MEDIA=6;
+    static int REQUEST_LOCATION=5, REQUEST_STORAGE=6, REQUEST_CAMERA=7;
     private Bitmap image;
     private User user;
     private LatLng postLocation;
     AlertDialog dialog;
     Post post;
     Uri imageLink;
+    private Uri outputFileUri;
+    final String[] Options = {"Gallery", "Camera"};
+    AlertDialog.Builder window;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,8 +74,30 @@ public class AddImage extends AppCompatActivity {
 
     public void chooseImage(View view)
     {
-        Intent gallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
-        startActivityForResult(gallery, REQUEST_MEDIA);
+        window = new AlertDialog.Builder(this);
+        window.setTitle("Pick a photo from:");
+        window.setItems(Options, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if(which == 0)
+                {
+                    Intent pickPhoto = new Intent(Intent.ACTION_PICK,
+                            android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                    startActivityForResult(pickPhoto , REQUEST_STORAGE);//one can be replaced with any action code
+                }
+                else if(which == 1)
+                {
+                    Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    startActivityForResult(takePicture, REQUEST_CAMERA);//zero can be replaced with any action code (called requestCode)
+                }
+                else
+                 {
+                    Toast.makeText(getApplicationContext(), "Hmmm I messed up. I detected that you clicked on : " + which + "?", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
+        window.show();
     }
 
     public void post(View view)
@@ -116,19 +149,26 @@ public class AddImage extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         Intent intent = getIntent();
 
-       if (requestCode == REQUEST_MEDIA) {
-            if (resultCode != Activity.RESULT_OK) {
-                Toast.makeText(AddImage.this, "Couldn't get image",
-                        Toast.LENGTH_SHORT).show();
-            } else {
-                Uri imageUri = data.getData();
-                try {
-                    this.image = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
-                    if (this.image == null)
-                        Log.e("err", "oof");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+        if (resultCode != Activity.RESULT_OK) {
+            Toast.makeText(AddImage.this, "Couldn't get image",
+                    Toast.LENGTH_SHORT).show();
+        }
+        else if (requestCode == REQUEST_STORAGE) {
+            assert data != null;
+            Uri imageUri = data.getData();
+            try {
+                this.image = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
+                if (this.image == null)
+                    Log.e("err", "oof");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else if (requestCode == REQUEST_CAMERA) {
+            try {
+                assert data != null;
+                image = (Bitmap) Objects.requireNonNull(data.getExtras()).get("data");
+            } catch (Exception e) {
+                Log.e("err", "oof");
             }
         }
     }
