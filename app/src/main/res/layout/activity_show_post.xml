@@ -100,6 +100,7 @@
                     android:src="@drawable/account"
                     android:layout_gravity="center_horizontal"
                     android:background="@null"
+                    android:onClick="goToProfile"
                     />
                 <TextView
                     android:id="@+id/username"

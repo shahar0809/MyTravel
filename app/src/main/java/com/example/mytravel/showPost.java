@@ -3,6 +3,7 @@ package com.example.mytravel;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -30,6 +31,7 @@ public class showPost extends AppCompatActivity
     ImageView image;
     User currUser;
     Post post;
+    AlertDialog dialog;
 
     // Database reference
     private FirebaseStorage mDatabase;
@@ -40,6 +42,13 @@ public class showPost extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_post);
+
+        /* User loading dialog */
+        AlertDialog.Builder builder = new AlertDialog.Builder(showPost.this);
+        builder.setCancelable(false);
+        builder.setView(R.layout.user_dialog);
+        dialog = builder.create();
+        dialog.show();
 
         Intent intent = getIntent();
         this.currUser = (User) intent.getParcelableExtra("user");
@@ -70,11 +79,12 @@ public class showPost extends AppCompatActivity
             @Override
             public void onSuccess(byte[] bytes) {
                 image.setImageBitmap(BitmapFactory.decodeByteArray(bytes, 0, bytes.length));
-
+                dialog.dismiss();
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
+                dialog.dismiss();
                 Toast.makeText(getApplicationContext(), "Can't load image", Toast.LENGTH_SHORT).show();
                 setResult(RESULT_CANCELED);
                 finish();
@@ -91,5 +101,12 @@ public class showPost extends AppCompatActivity
     public void likePost(View view)
     {
         //FirebaseDatabase.likePost(vie)
+    }
+
+    public void goToProfile(View view) {
+        Intent intent = new Intent(this, ShowUser.class);
+        intent.putExtra("currUser", currUser);
+        intent.putExtra("inputUser", post.getOwner());
+        startActivity(intent);
     }
 }
