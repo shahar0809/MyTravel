@@ -19,7 +19,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
-        <activity android:name=".showPost"></activity>
+        <activity android:name=".ShowUser"></activity>
+        <activity android:name=".showPost" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -48,7 +49,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".Activity" />
-        <service android:name = ".MainApp$MarkPosts"/>
+
+        <service android:name=".MainApp$MarkPosts" />
 
         <meta-data
             android:name="preloaded_fonts"
