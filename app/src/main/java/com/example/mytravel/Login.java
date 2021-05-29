@@ -41,33 +41,6 @@ public class Login extends AppCompatActivity
         bindElements();
 
         auth = FirebaseAuth.getInstance();
-        final FirebaseUser loggedUser = auth.getCurrentUser();
-        if (loggedUser != null) {
-            FirebaseDatabase mFirebaseDatabase = FirebaseDatabase.getInstance();
-            DatabaseReference databaseReference = mFirebaseDatabase.getReference("Users");
-            databaseReference.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    for (DataSnapshot childDataSnapshot : dataSnapshot.getChildren()) {
-                        User user = childDataSnapshot.getValue(User.class);
-                        assert user != null;
-                        if (user.getEmail().equals(loggedUser.getEmail()))
-                        {
-                            username = user.getUsername();
-                        }
-                    }
-                    User user = new User(username, loggedUser.getEmail());
-                    Intent intent = new Intent(Login.this, MainApp.class);
-                    intent.putExtra("user", user);
-                    startActivity(intent);
-                    finish();
-                }
-                @Override
-                public void onCancelled(DatabaseError firebaseError) {
-                    Log.e("The read failed: ", firebaseError.getMessage());
-                }
-            });
-        }
 
         /* User loading dialog */
         AlertDialog.Builder builder = new AlertDialog.Builder(Login.this);
@@ -133,6 +106,11 @@ public class Login extends AppCompatActivity
                                         }
                                     }
                                     dialog.dismiss();
+                                    User user = new User(username,  email_str);
+                                    Intent intent = new Intent(Login.this, MainApp.class);
+                                    intent.putExtra("user", user);
+                                    startActivity(intent);
+                                    finish();
                                 }
                                 @Override
                                 public void onCancelled(DatabaseError firebaseError) {
@@ -141,11 +119,7 @@ public class Login extends AppCompatActivity
                                 }
                             });
 
-                            User user = new User(username,  email_str);
-                            Intent intent = new Intent(Login.this, MainApp.class);
-                            intent.putExtra("user", user);
-                            startActivity(intent);
-                            finish();
+
                         }
                     }
                 });

@@ -11,6 +11,7 @@ import android.graphics.drawable.Drawable;
 import android.location.Criteria;
 import android.location.LocationManager;
 import android.net.Uri;
+import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -44,6 +45,8 @@ import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
+import com.google.android.material.bottomappbar.BottomAppBar;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -62,21 +65,22 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 public class MainApp extends AppCompatActivity implements OnMapReadyCallback, View.OnClickListener,
-        PlaceSelectionListener, GoogleMap.OnMapClickListener {
+        PlaceSelectionListener, GoogleMap.OnMapClickListener, BottomNavigationView.OnNavigationItemSelectedListener {
 
     final static int REQUEST_LOC_PERMISSIONS = 5, ADD_POST = 6;
+    static ArrayList<User> subUsers = new ArrayList<>();
 
     SupportMapFragment mapFragment;
     GoogleMap mMap;
     User user;
     Post currPost;
-    ArrayList<Post> posts = new ArrayList<Post>();
     LatLng postLocation;
     Marker userMarker;
     ClusterManager<Post> mClusterManager;
     AlertDialog dialog;
     String currId;
-    public static Queue<Post> postsQueue = new LinkedList<>();
+    BottomNavigationView bottomNavigationView;
+    BottomAppBar bottomAppBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,12 +95,34 @@ public class MainApp extends AppCompatActivity implements OnMapReadyCallback, Vi
         dialog = builder.create();
         dialog.show();
 
+        // Initialize the bottom navigation view
+        // create bottom navigation view object
+
+        bottomAppBar = findViewById(R.id.bottomAppBar);
+        bottomAppBar.setOnMenuItemClickListener(new OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch(item.getItemId())
+                {
+                    case R.id.action_settings:
+                        viewSettings();
+                    case R.id.action_favorites:
+                    viewFavorites();
+                }
+                return true;
+            }});
+
         // Getting user from intent extras
         Intent intent = getIntent();
         this.user = (User) intent.getParcelableExtra("user");
-
+        assert user != null;
+        Log.d("user", user.getEmail());
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(this);
+
+        Intent service = new Intent(this, pushService.class);
+        service.putExtra("currUser", user);
+        startService(service);
 
         // Requesting location permissions
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -165,6 +191,7 @@ public class MainApp extends AppCompatActivity implements OnMapReadyCallback, Vi
 
         /* Setting up marker clustering */
         mClusterManager = new ClusterManager<>(this, mMap);
+        mClusterManager.setAnimation(true);
         mClusterManager.setOnClusterItemClickListener(
                 new ClusterManager.OnClusterItemClickListener<Post>() {
                     @Override public boolean onClusterItemClick(Post clusterItem) {
@@ -177,10 +204,10 @@ public class MainApp extends AppCompatActivity implements OnMapReadyCallback, Vi
                     }
                 });
 
-        mMap.setOnInfoWindowClickListener(mClusterManager);
-        mMap.setInfoWindowAdapter(mClusterManager.getMarkerManager());
+        mMap.setOnCameraIdleListener(mClusterManager);
         mMap.setOnMarkerClickListener(mClusterManager);
-        googleMap.setOnInfoWindowClickListener(mClusterManager);
+
+        //googleMap.setOnInfoWindowClickListener(mClusterManager);
 
         getImages();
     }
@@ -209,7 +236,6 @@ public class MainApp extends AppCompatActivity implements OnMapReadyCallback, Vi
 
                             assert imageLink != null;
                             currPost = new Post(currId, location, description, name, owner, imageLink.toString());
-                            //postsQueue.add(currPost);
                             addMarker(currPost);
                         }
                     }
@@ -294,7 +320,7 @@ public class MainApp extends AppCompatActivity implements OnMapReadyCallback, Vi
     public void onError(@NotNull Status status) {
         Toast.makeText(MainApp.this, "Error while fetching location", Toast.LENGTH_LONG).show();
     }
-
+    /*
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -316,7 +342,7 @@ public class MainApp extends AppCompatActivity implements OnMapReadyCallback, Vi
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
+    }*/
 
     public void onClick(View view)
     {
@@ -336,7 +362,7 @@ public class MainApp extends AppCompatActivity implements OnMapReadyCallback, Vi
 
     public void viewSettings()
     {
-        Intent intent = new Intent(this, Settings.class);
+        Intent intent = new Intent(this, SettingsActivity.class);
         startActivity(intent);
     }
 
@@ -352,6 +378,21 @@ public class MainApp extends AppCompatActivity implements OnMapReadyCallback, Vi
         mMap.animateCamera(CameraUpdateFactory.zoomIn());
         // Zoom out to zoom level 10, animating with a duration of 2 seconds.
         mMap.animateCamera(CameraUpdateFactory.zoomTo(15), 2000, null);
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+        switch (menuItem.getItemId())
+        {
+            case R.id.action_settings:
+                viewSettings();
+                return true;
+            case R.id.action_favorites:
+                viewFavorites();
+                return true;
+            default:
+                return super.onOptionsItemSelected(menuItem);
+        }
     }
 
     private class RenderClusterInfoWindow extends DefaultClusterRenderer<Post> {

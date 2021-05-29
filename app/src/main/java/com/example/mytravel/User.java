@@ -4,6 +4,8 @@ import android.location.Location;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.firebase.database.DataSnapshot;
+
 import java.util.TreeMap;
 
 public class User implements Parcelable {
@@ -21,6 +23,11 @@ public class User implements Parcelable {
     {
         this.username = username;
         this.email = email;
+    }
+
+    public User(DataSnapshot snapshot) {
+        username = snapshot.child("name").getValue(String.class);
+        email = snapshot.child("email").getValue(String.class);
     }
 
     public String getUsername() { return username; }

@@ -100,6 +100,8 @@ public class SignUp extends Activity
                         User user = new User(username_str,  email_str);
                         firebaseMethods.generateUser(username_str, email_str);
 
+
+
                         if (!task.isSuccessful()) {
                             dialog.dismiss();
                             Toast.makeText(SignUp.this, "Authentication failed." + task.getException(),

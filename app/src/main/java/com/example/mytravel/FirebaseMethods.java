@@ -40,7 +40,7 @@ public class FirebaseMethods
     public static void followUser(User currUser, User inputUser)
     {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference follows = database.getReference("Follow");
+        DatabaseReference follows = database.getReference("Follows");
         DatabaseReference userRef = follows.child(currUser.getUsername());
         userRef.child("Following").child(inputUser.getUsername()).setValue(inputUser);
 
@@ -50,7 +50,7 @@ public class FirebaseMethods
     public static void unfollowUser(User currUser, User inputUser)
     {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference follows = database.getReference("Follow");
+        DatabaseReference follows = database.getReference("Follows");
         DatabaseReference userRef = follows.child(currUser.getUsername()).child("Following").child(inputUser.getUsername());
         userRef.removeValue();
 

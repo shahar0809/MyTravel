@@ -1,8 +1,14 @@
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <item android:id="@+id/action_settings"
         android:title="Settings"
-        android:icon="@drawable/settings_icon_selector" />
+        android:icon="@drawable/settings" />
+
+    <item
+        android:id="@+id/itemEmpty"
+        android:title=""/>
+
     <item android:id="@+id/action_favorites"
         android:title="Favorites"
-        android:icon="@drawable/favorites_icon_selector" />
+        android:icon="@drawable/favorites" />
 </menu>
