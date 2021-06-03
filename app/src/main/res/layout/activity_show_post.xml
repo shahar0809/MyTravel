@@ -94,10 +94,10 @@
                 android:layout_gravity="center_horizontal"
                 android:orientation="vertical">
                 <ImageButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
                     android:id="@+id/profileButton"
-                    android:src="@drawable/account"
+                    android:src="@drawable/account_big"
                     android:layout_gravity="center_horizontal"
                     android:background="@null"
                     android:onClick="goToProfile"

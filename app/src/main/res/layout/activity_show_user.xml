@@ -16,8 +16,9 @@
         android:background="@drawable/button_effect"
         style="@style/TextViewStyle"
         android:src="@drawable/arrow_back"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginVertical="20dp"
         android:layout_gravity="top"
-        android:layout_margin="5dp"
         android:onClick="goBack" />
 
     <com.google.android.material.card.MaterialCardView

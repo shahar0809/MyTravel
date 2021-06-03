@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -26,7 +27,7 @@ import com.google.firebase.database.ValueEventListener;
 public class Login extends AppCompatActivity
 {
     /* Elements in xml */
-    EditText email, password;
+    TextInputLayout emailInput, passwordInput;
     String email_str, password_str, username;
     FirebaseAuth auth;
     AlertDialog dialog;
@@ -41,33 +42,6 @@ public class Login extends AppCompatActivity
         bindElements();
 
         auth = FirebaseAuth.getInstance();
-        final FirebaseUser loggedUser = auth.getCurrentUser();
-        if (loggedUser != null) {
-            FirebaseDatabase mFirebaseDatabase = FirebaseDatabase.getInstance();
-            DatabaseReference databaseReference = mFirebaseDatabase.getReference("Users");
-            databaseReference.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    for (DataSnapshot childDataSnapshot : dataSnapshot.getChildren()) {
-                        User user = childDataSnapshot.getValue(User.class);
-                        assert user != null;
-                        if (user.getEmail().equals(loggedUser.getEmail()))
-                        {
-                            username = user.getUsername();
-                        }
-                    }
-                    User user = new User(username, loggedUser.getEmail());
-                    Intent intent = new Intent(Login.this, MainApp.class);
-                    intent.putExtra("user", user);
-                    startActivity(intent);
-                    finish();
-                }
-                @Override
-                public void onCancelled(DatabaseError firebaseError) {
-                    Log.e("The read failed: ", firebaseError.getMessage());
-                }
-            });
-        }
 
         /* User loading dialog */
         AlertDialog.Builder builder = new AlertDialog.Builder(Login.this);
@@ -78,8 +52,8 @@ public class Login extends AppCompatActivity
 
     protected void bindElements()
     {
-        this.email = findViewById(R.id.email_box);
-        this.password = findViewById(R.id.password_box);
+        emailInput = findViewById(R.id.emailField);
+        passwordInput = findViewById(R.id.passwordField);
     }
 
 
@@ -88,8 +62,8 @@ public class Login extends AppCompatActivity
         dialog.show();
 
         // Fetching strings
-        email_str = email.getText().toString();
-        password_str = password.getText().toString();
+        email_str = emailInput.getEditText().getText().toString();
+        password_str = passwordInput.getEditText().getText().toString();
 
         /* Checking that the fields are not empty */
         if (TextUtils.isEmpty(email_str))
@@ -133,6 +107,11 @@ public class Login extends AppCompatActivity
                                         }
                                     }
                                     dialog.dismiss();
+                                    User user = new User(username,  email_str);
+                                    Intent intent = new Intent(Login.this, MainApp.class);
+                                    intent.putExtra("user", user);
+                                    startActivity(intent);
+                                    finish();
                                 }
                                 @Override
                                 public void onCancelled(DatabaseError firebaseError) {
@@ -141,11 +120,7 @@ public class Login extends AppCompatActivity
                                 }
                             });
 
-                            User user = new User(username,  email_str);
-                            Intent intent = new Intent(Login.this, MainApp.class);
-                            intent.putExtra("user", user);
-                            startActivity(intent);
-                            finish();
+
                         }
                     }
                 });

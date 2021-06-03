@@ -9,28 +9,48 @@
     android:orientation="vertical"
     tools:context=".SignUp">
 
+    <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingBottom="5dp"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    android:id="@+id/appLayout">
 
+    <ImageView
+        android:id="@+id/logo"
+        android:layout_width="101dp"
+        android:layout_height="71dp"
+        android:background="@null"
+        android:src="@drawable/logo_only_transperent" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="MyTravel"
+        android:textAlignment="center"
+        android:fontFamily="@font/asap"
+        android:textSize="50sp"
+        android:textColor="#000000"
+        android:textStyle="bold" />
+</LinearLayout>
 
     <Space
         android:layout_width="match_parent"
-        android:layout_height="30dp" />
+        android:layout_height="10dp" />
 
-    <LinearLayout
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="10dp"
-        android:orientation="vertical">
+        android:text="Sign up"
+        android:fontFamily="@font/asap"
+        android:textSize="35sp"
+        android:textColor="#000000"
+        android:textStyle="bold" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Sign up"
-            android:fontFamily="@font/asap"
-            android:textSize="35sp"
-            android:textColor="#000000"
-            android:layout_marginBottom="40dp"
-            android:textStyle="bold" />
-    </LinearLayout>
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="10dp" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -40,124 +60,86 @@
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-            <LinearLayout
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/usernameField"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="10dp"
-                android:orientation="vertical"
-                android:id="@+id/usernameLayout"
-                android:weightSum="2">
+                android:hint="Username"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Username"
-                    android:textColor="#5C3FA1"
-                    style="@style/TextViewStyle"
-                    android:layout_weight="1"
-                    android:textSize="14sp"/>
-
-                <EditText
+                <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/username_box"
+                    android:id="@+id/usernameBox"
                     android:textColor="#000000"
                     style="@style/TextViewStyle"
-                    android:textSize="20sp"
-                    android:layout_weight="1" />
-            </LinearLayout>
+                    android:textSize="14sp"
+                    android:inputType="textPassword"
+                    />
+
+            </com.google.android.material.textfield.TextInputLayout>
 
             <Space
                 android:layout_width="match_parent"
-                android:layout_height="10dp" />
+                android:layout_height="15dp" />
 
-            <LinearLayout
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/emailField"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="10dp"
-                android:orientation="vertical"
-                android:id="@+id/emailLayout"
-                android:weightSum="2">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Email"
-                    android:textColor="#5C3FA1"
-                    style="@style/TextViewStyle"
-                    android:layout_weight="1"
-                    android:textSize="14sp"/>
+                android:hint="Email"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
-                <EditText
+                <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/email_box"
+                    android:id="@+id/emailBox"
                     android:textColor="#000000"
                     style="@style/TextViewStyle"
-                    android:textSize="20sp"
-                    android:layout_weight="1" />
+                    android:textSize="14sp"
+                    android:inputType="textPassword"
+                    />
 
-            </LinearLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
             <Space
                 android:layout_width="match_parent"
-                android:layout_height="10dp" />
+                android:layout_height="15dp" />
 
-            <LinearLayout
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/passwordField"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="10dp"
-                android:orientation="vertical"
-                android:weightSum="2">
+                android:hint="Password"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Password"
-                    android:textColor="#5C3FA1"
-                    android:layout_weight="1"
-                    style="@style/TextViewStyle"
-                    android:textSize="14sp"/>
-
-                <com.google.android.material.textfield.TextInputLayout
+                <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    app:hintEnabled="false"
-                    app:passwordToggleEnabled="true">
-                    <EditText
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:id="@+id/password_box"
-                        android:textColor="#000000"
-                        style="@style/TextViewStyle"
-                        android:textSize="20sp"
-                        android:inputType="textPassword" />
-                </com.google.android.material.textfield.TextInputLayout>
-            </LinearLayout>
+                    android:id="@+id/password_box"
+                    android:textColor="#000000"
+                    style="@style/TextViewStyle"
+                    android:textSize="14sp"
+                    android:inputType="textPassword"
+                    />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="30dp" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingStart="40dp"
+            android:paddingEnd="40dp"
+            android:text="Sign up"
+            android:textSize="18sp"
+            style="@style/ButtonStyle"
+            android:onClick="sign_up"
+            android:layout_gravity="center_horizontal" />
 
         </LinearLayout>
     </ScrollView>
-
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="30dp" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingVertical="2dp"
-        android:paddingHorizontal="2dp"
-        android:text="          Sign up          "
-        android:textSize="18sp"
-        android:textAllCaps="false"
-        android:textColor="#FFFFFF"
-        android:background="@drawable/button_effect"
-        style="@style/TextViewStyle"
-        android:onClick="sign_up"
-        android:layout_gravity="center_horizontal" />
-
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="50dp" />
-
 </LinearLayout>
