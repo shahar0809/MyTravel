@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
+import android.app.Service;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -23,6 +24,7 @@ public class ShowUser extends AppCompatActivity {
     TextView username;
     Button followButton;
     Boolean isFollowing = false;
+    Service notificationService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,9 +55,12 @@ public class ShowUser extends AppCompatActivity {
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot followedUser: dataSnapshot.getChildren()) {
-                    String currName = followedUser.child("name").getValue(String.class);
-                    isFollowing = currName.equals(inputUser.getUsername());
+                if (dataSnapshot.getChildrenCount() > 0)
+                {
+                    for (DataSnapshot followedUser: dataSnapshot.getChildren()) {
+                        String currName = followedUser.child("username").getValue(String.class);
+                        isFollowing = currName.equals(inputUser.getUsername());
+                    }
                 }
 
                 if (isFollowing) {
@@ -78,20 +83,21 @@ public class ShowUser extends AppCompatActivity {
 
     public void follow(View view)
     {
+        // Unfollowing
         if (isFollowing) {
             FirebaseMethods.unfollowUser(currUser, inputUser);
             followButton.setText("Follow");
             followButton.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
             isFollowing = false;
-
-        } else {
+        }
+        else
+        {
             FirebaseMethods.followUser(currUser, inputUser);
             followButton.setText("Following");
             int imgResource = R.drawable.done;
             followButton.setCompoundDrawablesWithIntrinsicBounds(imgResource, 0, 0, 0);
             isFollowing = true;
         }
-
     }
 
     public void goBack(View view) {

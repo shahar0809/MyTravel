@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -25,7 +26,7 @@ public class SignUp extends Activity
     AlertDialog dialog;
 
     /* Elements in xml */
-    EditText username, email, password;
+    TextInputLayout emailInput, passwordInput, usernameInput;
     String username_str, email_str, password_str;
 
     @Override
@@ -47,19 +48,19 @@ public class SignUp extends Activity
 
     protected void bindElements()
     {
-        username = findViewById(R.id.username_box);
-        email = findViewById(R.id.email_box);
-        password = findViewById(R.id.password_box);
+        usernameInput = findViewById(R.id.usernameField);
+        emailInput = findViewById(R.id.emailField);
+        passwordInput = findViewById(R.id.passwordField);
     }
 
     public void sign_up(View view)
     {
         dialog.show();
 
-        /* Fetching string attributes */
-        username_str = username.getText().toString();
-        email_str = email.getText().toString();
-        password_str = password.getText().toString();
+        // Fetching strings
+        username_str = usernameInput.getEditText().getText().toString();
+        email_str = emailInput.getEditText().getText().toString();
+        password_str = passwordInput.getEditText().getText().toString();
 
         /* Checking that the fields are not empty */
         if (TextUtils.isEmpty(username_str) && !username_str.contains("~"))
