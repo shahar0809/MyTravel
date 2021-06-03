@@ -2,13 +2,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item android:id="@+id/action_settings"
         android:title="Settings"
+        app:showAsAction="always|withText"
         android:icon="@drawable/settings" />
 
     <item
         android:id="@+id/itemEmpty"
         android:title=""/>
 
+
     <item android:id="@+id/action_favorites"
         android:title="Favorites"
+        app:showAsAction="always|withText"
         android:icon="@drawable/favorites" />
 </menu>

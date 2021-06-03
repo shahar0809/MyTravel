@@ -22,49 +22,46 @@
         android:layout_height="match_parent" />
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".MainActivity">
+        tools:context=".MainActivity"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="0dp">
 
         <com.google.android.material.bottomappbar.BottomAppBar
             android:id="@+id/bottomAppBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:contentInsetStart="0dp"
             android:layout_gravity="bottom"
-            app:fabCradleMargin="10dp"
-            android:backgroundTint="@color/light_purple"
-            app:fabCradleRoundedCornerRadius="10dp"
-            app:fabCradleVerticalOffset="10dp">
-
+            app:elevation="0dp"
+            android:backgroundTint="@color/light_purple">
             <com.google.android.material.bottomnavigation.BottomNavigationView
-                android:id="@+id/bottomNavigationView"
+                android:id="@+id/bottomNavigation"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 app:backgroundTint="@android:color/transparent"
                 app:elevation="0dp"
+                app:labelVisibilityMode="labeled"
                 app:itemIconTint="@android:color/white"
                 app:itemTextColor="@android:color/white"
-                app:labelVisibilityMode="labeled"
-                android:layout_marginHorizontal="35dp"
                 app:menu="@menu/navigation_bar_items" />
-
         </com.google.android.material.bottomappbar.BottomAppBar>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab"
+            android:onClick="addPost"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:backgroundTint="@color/light_purple"
             android:contentDescription="@string/app_name"
-            android:backgroundTint="@color/dark_purple"
             android:src="@drawable/add_icon"
+            app:borderWidth="0dp"
             app:itemIconTint="@android:color/white"
             app:itemTextColor="@android:color/white"
-            app:tint="@android:color/white"
-            app:borderWidth="0dp"
-            app:layout_anchor="@id/bottomAppBar" />
+            app:layout_anchor="@+id/bottomAppBar"
+            app:fabAlignmentMode="center"
+            app:tint="@android:color/white" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

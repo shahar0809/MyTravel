@@ -15,6 +15,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -24,6 +25,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -40,15 +42,16 @@ import java.util.Objects;
 import static androidx.core.graphics.TypefaceCompatUtil.getTempFile;
 
 public class AddImage extends AppCompatActivity {
-    EditText description, name;
-    static int REQUEST_LOCATION=5, REQUEST_STORAGE=6, REQUEST_CAMERA=7;
+    TextInputLayout description, name;
+    static int REQUEST_STORAGE = 6, REQUEST_CAMERA = 7;
+
     private Bitmap image;
     private User user;
     private LatLng postLocation;
-    AlertDialog dialog;
     Post post;
     Uri imageLink;
-    private Uri outputFileUri;
+
+    AlertDialog dialog;
     final String[] Options = {"Gallery", "Camera"};
     AlertDialog.Builder window;
 
@@ -57,13 +60,13 @@ public class AddImage extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_image);
-        description = findViewById(R.id.description);
-        name = findViewById(R.id.name);
+        description = findViewById(R.id.descField);
+        name = findViewById(R.id.nameField);
 
         // Getting user and location from intent extras
         Intent intent = getIntent();
-        this.user = (User) intent.getParcelableExtra("user");
-        this.postLocation = (LatLng) intent.getParcelableExtra("location");
+        this.user = intent.getParcelableExtra("user");
+        this.postLocation = intent.getParcelableExtra("location");
 
         /* User loading dialog */
         AlertDialog.Builder builder = new AlertDialog.Builder(AddImage.this);
@@ -100,47 +103,66 @@ public class AddImage extends AppCompatActivity {
         window.show();
     }
 
+    protected boolean checkValidity(String name, String desc)
+    {
+        /* Checking that the fields are not empty */
+        if (TextUtils.isEmpty(name))
+        {
+            Toast.makeText(getApplicationContext(), "Enter name!", Toast.LENGTH_SHORT).show();
+            dialog.dismiss();
+            return false;
+        }
+        return true;
+    }
+
     public void post(View view)
     {
         dialog.show();
 
-        /* Upload image to storage */
-        String postName = this.user.getUsername() + "~" + this.name.getText().toString();
-        FirebaseStorage storage = FirebaseStorage.getInstance();
-        // Create a storage reference from our app
-        final StorageReference userRef = storage.getReference().child("Users").child(this.user.getUsername()).child(postName);
+        // Fetching strings
+        final String desc_str = description.getEditText().getText().toString();
+        final String name_str = name.getEditText().getText().toString();
 
-        Bitmap bitmap = this.image;
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-        byte[] data = baos.toByteArray();
+        if (checkValidity(desc_str, name_str))
+        {
+            /* Upload image to storage */
+            String postName = this.user.getUsername() + "~" + name_str;
+            FirebaseStorage storage = FirebaseStorage.getInstance();
+            // Create a storage reference from our app
+            final StorageReference userRef = storage.getReference().child("Users").child(this.user.getUsername()).child(postName);
 
-        UploadTask uploadTask = userRef.putBytes(data);
-        uploadTask.addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                dialog.dismiss();
-                Toast.makeText(getApplicationContext(), "Error uploading image", Toast.LENGTH_SHORT).show();
-            }
-        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                userRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>()
-                  {
-                      @Override
-                      public void onSuccess(Uri uri) {
-                          imageLink = uri;
-                          Toast.makeText(AddImage.this, "Post is up!", Toast.LENGTH_LONG).show();
-                          post = new Post(postLocation, description.getText().toString(),
-                                  name.getText().toString(), user, imageLink);
-                          FirebaseMethods.generatePost(post);
-                          dialog.dismiss();
-                          setResult(RESULT_OK);
-                          finish();
-                      }
-                  });
-            }
-        });
+            Bitmap bitmap = this.image;
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+            byte[] data = baos.toByteArray();
+
+            UploadTask uploadTask = userRef.putBytes(data);
+            uploadTask.addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+                    dialog.dismiss();
+                    Toast.makeText(getApplicationContext(), "Error uploading image", Toast.LENGTH_SHORT).show();
+                }
+            }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    userRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>()
+                    {
+                        @Override
+                        public void onSuccess(Uri uri) {
+                            imageLink = uri;
+                            Toast.makeText(AddImage.this, "Post is up!", Toast.LENGTH_LONG).show();
+                            post = new Post(postLocation, desc_str,
+                                    name_str, user, imageLink);
+                            FirebaseMethods.generatePost(post);
+                            dialog.dismiss();
+                            setResult(RESULT_OK);
+                            finish();
+                        }
+                    });
+                }
+            });
+        }
     }
 
     @Override

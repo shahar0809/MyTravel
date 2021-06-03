@@ -5,38 +5,39 @@
     android:layout_marginVertical="20dp"
     android:orientation="vertical">
 
-    <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingVertical="3dp"
-        android:paddingHorizontal="3dp"
-        android:textColor="#FFFFFF"
-        android:background="@drawable/button_effect"
-        style="@style/TextViewStyle"
-        android:src="@drawable/arrow_back"
-        android:layout_gravity="top"
-        android:onClick="goBack" />
-
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/profile"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp">
+        android:orientation="horizontal">
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <ImageButton
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:orientation="vertical">
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    style="@style/TextViewStyle"
-                    android:textAlignment="center"
-                    android:text="Settings" />
+            android:paddingVertical="3dp"
+            android:paddingHorizontal="3dp"
+            android:textColor="#FFFFFF"
+            android:background="@drawable/button_effect"
+            style="@style/TextViewStyle"
+            android:src="@drawable/arrow_back"
+            android:layout_gravity="center_vertical"
+            android:onClick="goBack" />
 
-        </LinearLayout>
-    </com.google.android.material.card.MaterialCardView>
+        <Space
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            />
+
+        <TextView
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/TextViewStyle"
+            android:textAlignment="center"
+            android:textSize="36sp"
+
+            android:text="Settings" />
+
+    </LinearLayout>
 
     <Space
         android:layout_width="match_parent"
@@ -44,13 +45,28 @@
         />
 
     <Button
-        android:id="@+id/containedButton"
+        android:id="@+id/logout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:backgroundTint="@color/light_purple"
+        android:layout_gravity="center"
         android:onClick="logOut"
+        style="@style/ButtonStyle"
         android:text="Log out" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        />
+
+    <Button
+        android:id="@+id/password"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        android:onClick="changePassword"
+        style="@style/ButtonStyle"
+        android:text="Change password" />
 
 
 </LinearLayout>

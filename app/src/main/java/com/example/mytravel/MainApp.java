@@ -48,6 +48,7 @@ import com.google.android.libraries.places.widget.listener.PlaceSelectionListene
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.navigation.NavigationBarView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -64,10 +65,10 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Queue;
 
-public class MainApp extends AppCompatActivity implements OnMapReadyCallback, View.OnClickListener,
-        PlaceSelectionListener, GoogleMap.OnMapClickListener, BottomNavigationView.OnNavigationItemSelectedListener {
+public class MainApp extends AppCompatActivity implements OnMapReadyCallback,
+        PlaceSelectionListener, GoogleMap.OnMapClickListener {
 
-    final static int REQUEST_LOC_PERMISSIONS = 5, ADD_POST = 6;
+    final static int REQUEST_LOC_PERMISSIONS = 5, ADD_POST = 6, SHOW_POST = 7, SETTINGS = 8;
     static ArrayList<User> subUsers = new ArrayList<>();
 
     SupportMapFragment mapFragment;
@@ -79,11 +80,10 @@ public class MainApp extends AppCompatActivity implements OnMapReadyCallback, Vi
     ClusterManager<Post> mClusterManager;
     AlertDialog dialog;
     String currId;
-    BottomNavigationView bottomNavigationView;
-    BottomAppBar bottomAppBar;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_app);
         Places.initialize(getApplicationContext(), "@string/API_KEY");
@@ -95,30 +95,13 @@ public class MainApp extends AppCompatActivity implements OnMapReadyCallback, Vi
         dialog = builder.create();
         dialog.show();
 
-        // Initialize the bottom navigation view
-        // create bottom navigation view object
-
-        bottomAppBar = findViewById(R.id.bottomAppBar);
-        bottomAppBar.setOnMenuItemClickListener(new OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                switch(item.getItemId())
-                {
-                    case R.id.action_settings:
-                        viewSettings();
-                    case R.id.action_favorites:
-                    viewFavorites();
-                }
-                return true;
-            }});
+        initComponents();
 
         // Getting user from intent extras
         Intent intent = getIntent();
-        this.user = (User) intent.getParcelableExtra("user");
+        this.user = intent.getParcelableExtra("user");
         assert user != null;
         Log.d("user", user.getEmail());
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(this);
 
         Intent service = new Intent(this, pushService.class);
         service.putExtra("currUser", user);
@@ -128,8 +111,27 @@ public class MainApp extends AppCompatActivity implements OnMapReadyCallback, Vi
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             requestPermissions(new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION}, REQUEST_LOC_PERMISSIONS);
             finish();
-        } else { initMap(); }
+        }
+        else { initMap(); }
     }
+
+    protected void initComponents()
+    {
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigation);
+        bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                if (item.getItemId() == R.id.action_favorites) {
+                    viewFavorites();
+                    return true;
+                } else {
+                    viewSettings();
+                }
+                return false;
+            }
+        });
+    }
+
 
     protected void initMap() {
         mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
@@ -251,9 +253,13 @@ public class MainApp extends AppCompatActivity implements OnMapReadyCallback, Vi
                 dialog.dismiss();
             }
         });
+
+        mClusterManager.cluster();
+        dialog.dismiss();
     }
 
-    public void onMapClick(final LatLng clickCoords) {
+    public void onMapClick(final LatLng clickCoords)
+    {
         if (clickCoords != null)
         {
             if (this.userMarker != null)
@@ -266,7 +272,7 @@ public class MainApp extends AppCompatActivity implements OnMapReadyCallback, Vi
                     .draggable(true)
                     .snippet("Drag the marker to choose location")
                     .flat(true)
-                    .icon(BitmapFromVector(getApplicationContext(), R.drawable.person_pin));
+                    .icon(Utils.BitmapFromVector(getApplicationContext(), R.drawable.person_pin));
 
             this.userMarker = mMap.addMarker(marker);
         }
@@ -278,36 +284,21 @@ public class MainApp extends AppCompatActivity implements OnMapReadyCallback, Vi
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data)
+    {
         super.onActivityResult(requestCode, resultCode, data);
-        dialog.show();
-        getImages();
+
         if (requestCode == ADD_POST && resultCode == RESULT_OK)
         {
+            dialog.show();
+            getImages();
             this.userMarker.remove();
+        } else if (requestCode == SETTINGS && resultCode == SettingsActivity.LOG_OUT)
+        {
+            Intent intent = new Intent(this, Login.class);
+            startActivity(intent);
+            finish();
         }
-    }
-
-    private BitmapDescriptor BitmapFromVector(Context context, int vectorResId) {
-        // below line is use to generate a drawable.
-        Drawable vectorDrawable = ContextCompat.getDrawable(context, vectorResId);
-
-        // below line is use to set bounds to our vector drawable.
-        vectorDrawable.setBounds(0, 0, vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight());
-
-        // below line is use to create a bitmap for our
-        // drawable which we have added.
-        Bitmap bitmap = Bitmap.createBitmap(vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
-
-        // below line is use to add bitmap in our canvas.
-        Canvas canvas = new Canvas(bitmap);
-
-        // below line is use to draw our
-        // vector drawable in canvas.
-        vectorDrawable.draw(canvas);
-
-        // after generating our bitmap we are returning our bitmap.
-        return BitmapDescriptorFactory.fromBitmap(bitmap);
     }
 
     @Override
@@ -320,31 +311,8 @@ public class MainApp extends AppCompatActivity implements OnMapReadyCallback, Vi
     public void onError(@NotNull Status status) {
         Toast.makeText(MainApp.this, "Error while fetching location", Toast.LENGTH_LONG).show();
     }
-    /*
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.navigation_bar_items, menu);
-        return true;
-    }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
-        switch (item.getItemId())
-        {
-            case R.id.action_settings:
-                viewSettings();
-                return true;
-            case R.id.action_favorites:
-                viewFavorites();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }*/
-
-    public void onClick(View view)
+    public void addPost(View view)
     {
         if (userMarker != null)
         {
@@ -363,7 +331,7 @@ public class MainApp extends AppCompatActivity implements OnMapReadyCallback, Vi
     public void viewSettings()
     {
         Intent intent = new Intent(this, SettingsActivity.class);
-        startActivity(intent);
+        startActivityForResult(intent, SETTINGS);
     }
 
     public void viewFavorites()
@@ -378,21 +346,6 @@ public class MainApp extends AppCompatActivity implements OnMapReadyCallback, Vi
         mMap.animateCamera(CameraUpdateFactory.zoomIn());
         // Zoom out to zoom level 10, animating with a duration of 2 seconds.
         mMap.animateCamera(CameraUpdateFactory.zoomTo(15), 2000, null);
-    }
-
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-        switch (menuItem.getItemId())
-        {
-            case R.id.action_settings:
-                viewSettings();
-                return true;
-            case R.id.action_favorites:
-                viewFavorites();
-                return true;
-            default:
-                return super.onOptionsItemSelected(menuItem);
-        }
     }
 
     private class RenderClusterInfoWindow extends DefaultClusterRenderer<Post> {
