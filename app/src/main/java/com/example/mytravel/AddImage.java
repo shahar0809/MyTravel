@@ -189,6 +189,13 @@ public class AddImage extends AppCompatActivity {
             try {
                 assert data != null;
                 image = (Bitmap) Objects.requireNonNull(data.getExtras()).get("data");
+                if (image.getByteCount() > Utils.MAX_IMAGE_SIZE)
+                {
+                    Toast.makeText(AddImage.this, "Image is too big!",
+                            Toast.LENGTH_SHORT).show();
+                    image = null;
+                }
+
             } catch (Exception e) {
                 Log.e("err", "oof");
             }
