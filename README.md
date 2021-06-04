@@ -1,3 +1,4 @@
-MyTravel
+###MyTravel
 
-## Social media app that uses a map to show posts around the globe.
+# Description
+Social media app that uses a map to show posts around the globe.
