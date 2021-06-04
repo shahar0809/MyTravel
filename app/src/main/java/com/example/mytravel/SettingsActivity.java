@@ -26,6 +26,10 @@ public class SettingsActivity extends AppCompatActivity {
         finish();
     }
 
+    public void changePassword() {
+        finish();
+    }
+
     public void goBack(View view) {
         finish();
     }
