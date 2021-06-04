@@ -3,7 +3,12 @@ package com.example.mytravel;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -27,6 +32,14 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         progressBar = findViewById(R.id.progress);
+
+        OfflineBroadcastReceiver offlineForeground = new OfflineBroadcastReceiver();
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+        //filter.addAction(WifiManager.WIFI_STATE_CHANGED_ACTION);
+        //filter.addAction(WifiManager.NETWORK_STATE_CHANGED_ACTION);
+        //filter.addAction(Intent.ACTION_AIRPLANE_MODE_CHANGED);
+        registerReceiver(offlineForeground, filter);
 
         authService = FirebaseAuth.getInstance();
         getCurrentUser();

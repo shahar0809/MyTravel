@@ -74,7 +74,7 @@
                     android:textColor="#000000"
                     style="@style/TextViewStyle"
                     android:textSize="14sp"
-                    android:inputType="textPassword"
+                    android:inputType="text"
                     />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -91,14 +91,13 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
                     android:id="@+id/emailBox"
-                    android:textColor="#000000"
                     style="@style/TextViewStyle"
-                    android:textSize="14sp"
-                    android:inputType="textPassword"
-                    />
+                    android:layout_width="match_parent"
+                    android:layout_height="61dp"
+                    android:inputType="textEmailAddress"
+                    android:textColor="#000000"
+                    android:textSize="14sp" />
 
             </com.google.android.material.textfield.TextInputLayout>
 

@@ -30,13 +30,14 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
             android:orientation="vertical">
 
             <!-- Media -->
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="194dp"
-                android:src="@drawable/account"
+                android:src="@drawable/account_big"
                 android:scaleType="centerCrop"
                 />
 
@@ -58,6 +59,83 @@
                     />
             </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:weightSum="3"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Posts"
+                        android:textAlignment="center"
+                        style="@style/TextViewStyle"
+                        android:textSize="14sp" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/postsCount"
+                        android:text="53"
+                        android:textAlignment="center"
+                        style="@style/TextViewStyle"
+                        android:textSize="14sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Followers"
+                        android:textAlignment="center"
+                        style="@style/TextViewStyle"
+                        android:textSize="14sp" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/followersCount"
+                        android:text="53"
+                        android:textAlignment="center"
+                        style="@style/TextViewStyle"
+                        android:textSize="14sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Following"
+                        android:textAlignment="center"
+                        style="@style/TextViewStyle"
+                        android:textSize="14sp" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/followingCount"
+                        android:textAlignment="center"
+                        android:text="53"
+                        style="@style/TextViewStyle"
+                        android:textSize="14sp" />
+                </LinearLayout>
+
+            </LinearLayout>
             <!-- Buttons -->
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -75,6 +153,7 @@
                     style="?attr/borderlessButtonStyle"
                     app:backgroundTint="@color/light_purple"
                     android:onClick="follow"
+                    android:textColor="@android:color/white"
                     />
             </LinearLayout>
 
