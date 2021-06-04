@@ -35,7 +35,6 @@ public class showPost extends AppCompatActivity
 
     // Database reference
     private FirebaseStorage mDatabase;
-    final static long ONE_MEGABYTE = 1024 * 1024;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -75,7 +74,7 @@ public class showPost extends AppCompatActivity
         mDatabase = FirebaseStorage.getInstance();
         StorageReference storage = mDatabase.getReferenceFromUrl(post.getImageLink());
 
-        storage.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+        storage.getBytes(Utils.MAX_IMAGE_SIZE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
             @Override
             public void onSuccess(byte[] bytes) {
                 image.setImageBitmap(BitmapFactory.decodeByteArray(bytes, 0, bytes.length));

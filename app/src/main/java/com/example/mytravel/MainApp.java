@@ -122,7 +122,7 @@ public class MainApp extends AppCompatActivity implements OnMapReadyCallback,
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 if (item.getItemId() == R.id.action_favorites) {
-                    viewFavorites();
+                    viewAccount();
                     return true;
                 } else {
                     viewSettings();
@@ -334,9 +334,11 @@ public class MainApp extends AppCompatActivity implements OnMapReadyCallback,
         startActivityForResult(intent, SETTINGS);
     }
 
-    public void viewFavorites()
+    public void viewAccount()
     {
-        Intent intent = new Intent(this, Favorites.class);
+        Intent intent = new Intent(this, ShowUser.class);
+        intent.putExtra("currUser", user);
+        intent.putExtra("inputUser", user);
         startActivity(intent);
     }
 

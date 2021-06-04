@@ -7,6 +7,7 @@ import androidx.core.content.ContextCompat;
 import android.app.Service;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -21,10 +22,13 @@ import com.google.firebase.database.ValueEventListener;
 
 public class ShowUser extends AppCompatActivity {
     User currUser, inputUser;
-    TextView username;
+    TextView username, postsCounter, followersCounter, followingCounter;
     Button followButton;
     Boolean isFollowing = false;
     Service notificationService;
+    long followersCount = 0;
+    long followingCount = 0;
+    long postsCount = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +39,9 @@ public class ShowUser extends AppCompatActivity {
         this.currUser = (User) intent.getParcelableExtra("currUser");
         this.inputUser = (User) intent.getParcelableExtra("inputUser");
 
+        followingCounter = findViewById(R.id.followingCount);
+        followersCounter = findViewById(R.id.followersCount);
+        postsCounter = findViewById(R.id.postsCount);
         username = findViewById(R.id.username);
         username.setText(inputUser.getUsername());
 
@@ -43,8 +50,24 @@ public class ShowUser extends AppCompatActivity {
         if (currUser.getUsername().equals(inputUser.getUsername()))
         {
             followButton.setVisibility(View.GONE);
-        } else {
+        }
+        else
+         {
+            try
+            {
+                checkFollows();
+            } catch (Exception e) {
+                Log.e("get follow data", e.getMessage());
+            }
+        }
+        try
+        {
             checkFollows();
+            countFollowers();
+            countFollowing();
+            countPosts();
+        } catch (Exception e) {
+            Log.e("get follow data", e.getMessage());
         }
     }
 
@@ -79,8 +102,6 @@ public class ShowUser extends AppCompatActivity {
         });
     }
 
-
-
     public void follow(View view)
     {
         // Unfollowing
@@ -98,6 +119,60 @@ public class ShowUser extends AppCompatActivity {
             followButton.setCompoundDrawablesWithIntrinsicBounds(imgResource, 0, 0, 0);
             isFollowing = true;
         }
+    }
+
+    protected void countFollowers()
+    {
+        FirebaseDatabase mFirebaseDatabase = FirebaseDatabase.getInstance();
+        DatabaseReference databaseReference = mFirebaseDatabase.getReference("Follows").child(inputUser.getUsername()).child("Followers");
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                followersCount = snapshot.getChildrenCount();
+                followersCounter.setText(Long.toString(followersCount));
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e("Count Followers", error.getDetails());
+            }
+        });
+    }
+
+    protected void countFollowing()
+    {
+        FirebaseDatabase mFirebaseDatabase = FirebaseDatabase.getInstance();
+        DatabaseReference databaseReference = mFirebaseDatabase.getReference("Follows").child(inputUser.getUsername()).child("Following");
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                followingCount = snapshot.getChildrenCount();
+                followingCounter.setText(Long.toString(followingCount));
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e("Count Following", error.getDetails());
+            }
+        });
+    }
+
+    protected void countPosts()
+    {
+        FirebaseDatabase mFirebaseDatabase = FirebaseDatabase.getInstance();
+        DatabaseReference databaseReference = mFirebaseDatabase.getReference("Posts").child(inputUser.getUsername());
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                postsCount = snapshot.getChildrenCount();
+                postsCounter.setText(Long.toString(postsCount));
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e("Count Following", error.getDetails());
+            }
+        });
     }
 
     public void goBack(View view) {

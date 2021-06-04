@@ -18,6 +18,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 
 public class SignUp extends Activity
 {
@@ -107,6 +109,9 @@ public class SignUp extends Activity
                                     Toast.LENGTH_SHORT).show();
                         }
                         else {
+                            FirebaseUser currUser = FirebaseAuth.getInstance().getCurrentUser();
+                            UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder().setDisplayName(username_str).build();
+                            currUser.updateProfile(profileUpdates);
                             dialog.dismiss();
                             Intent intent = new Intent(SignUp.this, MainApp.class);
                             intent.putExtra("user", user);

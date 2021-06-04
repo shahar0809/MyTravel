@@ -148,7 +148,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Register"
-            android:textSize="12sp"
+            android:textSize="14sp"
             android:textAllCaps="false"
             android:onClick="signUp"
             style="@style/ButtonStyle" />
@@ -157,7 +157,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Reset password"
-            android:textSize="12sp"
+            android:textSize="14sp"
             android:textAllCaps="false"
             style="@style/ButtonStyle" />
     </LinearLayout>
