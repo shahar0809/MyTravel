@@ -136,7 +136,18 @@
             android:text="Sign up"
             android:textSize="18sp"
             style="@style/ButtonStyle"
-            android:onClick="sign_up"
+            android:onClick="signUp"
+            android:layout_gravity="center_horizontal" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingStart="40dp"
+            android:paddingEnd="40dp"
+            android:text="Sign in"
+            android:textSize="18sp"
+            style="@style/ButtonStyle"
+            android:onClick="signIn"
             android:layout_gravity="center_horizontal" />
 
         </LinearLayout>

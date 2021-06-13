@@ -17,8 +17,6 @@ import com.google.maps.android.clustering.ClusterManager;
 
 public class FirebaseMethods
 {
-    ClusterManager mClusterManager;
-
     public static void generateUser(String username, String email)
     {
         Log.d("firebase", "in gen");
@@ -35,14 +33,6 @@ public class FirebaseMethods
         DatabaseReference userRef = posts.child(post.getOwner().getUsername());
         userRef.push().setValue(post);
         return userRef.getKey();
-    }
-
-    public void likePost(Post post, User user)
-    {
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference likes = database.getReference("Likes");
-        DatabaseReference postRef = likes.child(post.getId());
-        postRef.child(user.getUsername()).setValue(user);
     }
 
     public static void followUser(User currUser, User inputUser)

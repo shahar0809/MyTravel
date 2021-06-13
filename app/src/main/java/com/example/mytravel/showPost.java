@@ -97,10 +97,10 @@ public class showPost extends AppCompatActivity
         finish();
     }
 
-    public void likePost(View view)
+    /*public void likePost(View view)
     {
         //FirebaseDatabase.likePost(vie)
-    }
+    }*/
 
     public void goToProfile(View view) {
         Intent intent = new Intent(this, ShowUser.class);

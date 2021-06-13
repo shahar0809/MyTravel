@@ -169,9 +169,8 @@ public class AddImage extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data)
     {
         super.onActivityResult(requestCode, resultCode, data);
-        Intent intent = getIntent();
 
-        if (resultCode != Activity.RESULT_OK) {
+        if (resultCode != RESULT_OK) {
             Toast.makeText(AddImage.this, "Couldn't get image",
                     Toast.LENGTH_SHORT).show();
         }

@@ -8,25 +8,23 @@ import com.google.firebase.database.DataSnapshot;
 
 import java.util.TreeMap;
 
-public class User implements Parcelable {
+public class User implements Parcelable
+{
     String username;
     String email;
 
     /* Empty c'tor for firebase */
     public User() {}
-    /*
-        if (you.isReading.this){
-        you.setThis(Really.Dumb)
-        }
-    */
+
     public User(String username, String email)
     {
         this.username = username;
         this.email = email;
     }
 
-    public User(DataSnapshot snapshot) {
-        username = snapshot.child("name").getValue(String.class);
+    public User(DataSnapshot snapshot)
+    {
+        username = snapshot.child("username").getValue(String.class);
         email = snapshot.child("email").getValue(String.class);
     }
 
@@ -36,9 +34,8 @@ public class User implements Parcelable {
 
     public String getEmail() { return email; }
 
-    public void setEmail(String email) { this.email = email; }
-
-    protected User(Parcel in) {
+    protected User(Parcel in)
+    {
         username = in.readString();
         email = in.readString();
     }
@@ -49,13 +46,15 @@ public class User implements Parcelable {
     }
 
     @Override
-    public void writeToParcel(Parcel dest, int flags) {
+    public void writeToParcel(Parcel dest, int flags)
+    {
         dest.writeString(username);
         dest.writeString(email);
     }
 
     @SuppressWarnings("unused")
-    public static final Parcelable.Creator<User> CREATOR = new Parcelable.Creator<User>() {
+    public static final Parcelable.Creator<User> CREATOR = new Parcelable.Creator<User>()
+    {
         @Override
         public User createFromParcel(Parcel in) {
             return new User(in);
