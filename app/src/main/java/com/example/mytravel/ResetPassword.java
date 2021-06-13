@@ -61,6 +61,8 @@ public class ResetPassword extends AppCompatActivity
                         {
                             Log.d("Reset", "Email sent.");
                             confirmation.setVisibility(View.VISIBLE);
+                            dialog.dismiss();
+                            finish();
                         }
                     }
                 });

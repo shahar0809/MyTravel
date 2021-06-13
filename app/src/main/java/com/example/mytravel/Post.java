@@ -7,7 +7,18 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.database.DataSnapshot;
 import com.google.maps.android.clustering.ClusterItem;
 
-public class Post implements ClusterItem, Parcelable {
+/**
+ * A class that represents a post created bu the user.
+ * Each post contains:
+ * location: The exact coordination of the post
+ * description: A short sentence to describe the post.
+ * name: The name of the post
+ * imageLink: The link to the image of the post in firebase storage
+ * owner: The user that uploaded the post
+ * id: The key of the post node in firebase
+ */
+public class Post implements ClusterItem, Parcelable
+{
     LatLng location;
     String description;
     String name;
@@ -17,18 +28,42 @@ public class Post implements ClusterItem, Parcelable {
 
     public Post() { }
 
+    /**
+     * Gets the name of the post.
+     * @return The post's name
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Gets the link of the post's image.
+     * @return The link in firebase storage to the image
+     */
     public String getImageLink() { return imageLink; }
 
+    /**
+     * Sets a new name to the post
+     * @param name the new name
+     */
     public void setName(String name) {
         this.name = name;
     }
 
+    /**
+     * Gets the ID of the post.
+     * @return The ID of the post node in firebase
+     */
     public String getId() { return id; };
 
+    /**
+     * Constructor to the post object
+     * @param location The location of the post
+     * @param desc The description of the post
+     * @param name The name of the post
+     * @param owner The user that created the post
+     * @param imageLink The link to the image in the storage
+     */
     public Post(LatLng location, String desc, String name, User owner, Uri imageLink) {
         this.location = location;
         this.description = desc;
@@ -37,6 +72,15 @@ public class Post implements ClusterItem, Parcelable {
         this.imageLink = imageLink.toString();
     }
 
+    /**
+     * Constructor to the post object (with id)
+     * @param id The id of post in firebase
+     * @param location The location of the post
+     * @param desc The description of the post
+     * @param name The name of the post
+     * @param owner The user that created the post
+     * @param imageLink The link to the image in the storage
+     */
     public Post(String id, LatLng location, String desc, String name, User owner, String imageLink) {
         this.id = id;
         this.location = location;
@@ -46,6 +90,10 @@ public class Post implements ClusterItem, Parcelable {
         this.imageLink = imageLink;
     }
 
+    /**
+     * Constructor to post constructed from a data snapshot from firebase.
+     * @param postSnapshot
+     */
     public Post(DataSnapshot postSnapshot)
     {
         // Constructing all parameters of post
@@ -59,14 +107,26 @@ public class Post implements ClusterItem, Parcelable {
         imageLink = postSnapshot.child("imageLink").getValue(String.class);
     }
 
+    /**
+     * Gets the location of the post
+     * @return The location of the post (in latLng format)
+     */
     public LatLng getLocation() {
         return location;
     }
 
+    /**
+     * Gets the user that created the post
+     * @return The user object
+     */
     public User getOwner() {
         return owner;
     }
 
+    /**
+     * Gets the description of the post
+     * @return the description
+     */
     public String getDescription() {
         return description;
     }

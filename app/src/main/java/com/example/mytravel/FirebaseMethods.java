@@ -15,17 +15,30 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.maps.android.clustering.ClusterManager;
 
+/*
+Methods to upload Classes and data to firebase Realtime Database.
+The class pushed the classes in JSON format, while choosing the key in firebase.
+ */
 public class FirebaseMethods
 {
+    /**
+     * Creates a user appearance in the Users node with the username as key.
+     * @param username The username of the new user
+     * @param email The email of the new user.
+     */
     public static void generateUser(String username, String email)
     {
-        Log.d("firebase", "in gen");
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference users = database.getReference("Users");
         User user = new User(username, email);
         users.child(username).setValue(user);
     }
 
+    /**
+     * Creates a new post node in the posts node, with the key generated.
+     * @param post The post objects that contains all of the post's attributes
+     * @return The key of the post node
+     */
     public static String generatePost(Post post)
     {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -35,6 +48,11 @@ public class FirebaseMethods
         return userRef.getKey();
     }
 
+    /**
+     * Adds the current user as a follower of the input user in the Follows node.
+     * @param currUser The logged in user.
+     * @param inputUser The user the current user wants to follow
+     */
     public static void followUser(User currUser, User inputUser)
     {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -45,6 +63,11 @@ public class FirebaseMethods
         follows.child(inputUser.getUsername()).child("Followers").child(currUser.getUsername()).setValue(currUser);
     }
 
+    /**
+     * Remove the current user as a follower of the input user.
+     * @param currUser The logged in user.
+     * @param inputUser The user the current user wants to unfollow
+     */
     public static void unfollowUser(User currUser, User inputUser)
     {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
