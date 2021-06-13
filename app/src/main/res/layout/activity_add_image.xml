@@ -15,7 +15,6 @@
         android:paddingVertical="3dp"
         android:paddingHorizontal="3dp"
         android:textColor="#FFFFFF"
-        android:background="@drawable/button_effect"
         style="@style/TextViewStyle"
         android:src="@drawable/arrow_back"
         android:layout_gravity="left"

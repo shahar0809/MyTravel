@@ -13,7 +13,6 @@
         android:paddingVertical="3dp"
         android:paddingHorizontal="3dp"
         android:textColor="#FFFFFF"
-        android:background="@drawable/button_effect"
         style="@style/TextViewStyle"
         android:src="@drawable/arrow_back"
         android:layout_marginHorizontal="20dp"
@@ -93,8 +92,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:clickable="true"
-                    android:onClick="showFollowers"
                     android:gravity="center_horizontal"
                     android:orientation="vertical">
                     <TextView
@@ -118,8 +115,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:clickable="true"
-                    android:onClick="showFollowing"
                     android:gravity="center_horizontal"
                     android:orientation="vertical">
                     <TextView

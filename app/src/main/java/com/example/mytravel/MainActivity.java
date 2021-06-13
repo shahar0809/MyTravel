@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
         final FirebaseUser loggedUser = authService.getCurrentUser();
         Intent intent = new Intent(MainActivity.this, Login.class);
         startActivity(intent);
-        /*if (loggedUser != null)
+        if (loggedUser != null)
         {
             Log.d("logged", "there is a logged user");
             FirebaseDatabase mFirebaseDatabase = FirebaseDatabase.getInstance();
@@ -83,9 +83,9 @@ public class MainActivity extends AppCompatActivity {
         }
         else
             {
-            Intent intent = new Intent(MainActivity.this, Login.class);
-            startActivity(intent);
-        }*/
+            Intent i = new Intent(MainActivity.this, Login.class);
+            startActivity(i);
+        }
     }
 
 }

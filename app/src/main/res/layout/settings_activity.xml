@@ -1,6 +1,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_marginHorizontal="20dp"
     android:layout_marginVertical="20dp"
     android:orientation="vertical">
@@ -16,7 +17,6 @@
             android:paddingVertical="3dp"
             android:paddingHorizontal="3dp"
             android:textColor="#FFFFFF"
-            android:background="@drawable/button_effect"
             style="@style/TextViewStyle"
             android:src="@drawable/arrow_back"
             android:layout_gravity="center_vertical"
@@ -57,6 +57,15 @@
         android:layout_width="match_parent"
         android:layout_height="30dp"
         />
+
+    <com.google.android.material.switchmaterial.SwitchMaterial
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/musicSwitch"
+        android:layout_marginHorizontal="30dp"
+        android:textSize="18sp"
+        android:checked="true"
+        android:text="Music"/>
 
     <Button
         android:id="@+id/password"

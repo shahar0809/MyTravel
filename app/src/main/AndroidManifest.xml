@@ -18,7 +18,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ShowUsers"></activity>
         <activity android:name=".ResetPassword" />
         <activity android:name=".OfflineActivity" />
         <activity android:name=".MainActivity">

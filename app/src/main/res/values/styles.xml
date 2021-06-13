@@ -2,6 +2,8 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Customize your theme here. -->
+        <item name="colorOnSurface">@color/light_purple</item>
+        <item name="colorSecondary">#9C30DF</item>
         <item name="colorPrimary">@color/light_purple</item>
         <item name="colorPrimaryDark">@color/light_purple</item>
         <item name="android:fontFamily">@font/asap</item>

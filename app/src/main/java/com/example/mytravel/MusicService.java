@@ -34,7 +34,7 @@ public class MusicService extends Service
     public int onStartCommand(Intent intent, int flags, int startId)
     {
         mPlayer.start();
-        return super.onStartCommand(intent, flags, startId);
+        return Service.START_NOT_STICKY;
     }
 
     public void onPause()

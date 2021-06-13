@@ -179,20 +179,4 @@ public class ShowUser extends AppCompatActivity {
     public void goBack(View view) {
         finish();
     }
-
-    public void showFollowers(View view)
-    {
-        Intent intent = new Intent(this, ShowUsers.class);
-        intent.putExtra("currUser", currUser);
-        intent.putExtra("usersAction", "Followers");
-        startActivity(intent);
-    }
-
-    public void showFollowing(View view)
-    {
-        Intent intent = new Intent(this, ShowUsers.class);
-        intent.putExtra("currUser", currUser);
-        intent.putExtra("usersAction", "Following");
-        startActivity(intent);
-    }
 }
