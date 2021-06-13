@@ -7,7 +7,7 @@
     android:orientation="vertical"
     android:layout_marginHorizontal="20dp"
     android:layout_marginVertical="20dp"
-    tools:context=".AddImage">
+    tools:context=".AddPost">
 
     <ImageButton
         android:layout_width="wrap_content"

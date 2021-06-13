@@ -5,23 +5,17 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.Toast;
 
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -31,17 +25,10 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
-import static androidx.core.graphics.TypefaceCompatUtil.getTempFile;
-
-public class AddImage extends AppCompatActivity {
+public class AddPost extends AppCompatActivity {
     TextInputLayout description, name;
     static int REQUEST_STORAGE = 6, REQUEST_CAMERA = 7;
 
@@ -59,7 +46,7 @@ public class AddImage extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_image);
+        setContentView(R.layout.activity_add_post);
         description = findViewById(R.id.descField);
         name = findViewById(R.id.nameField);
 
@@ -69,7 +56,7 @@ public class AddImage extends AppCompatActivity {
         this.postLocation = intent.getParcelableExtra("location");
 
         /* User loading dialog */
-        AlertDialog.Builder builder = new AlertDialog.Builder(AddImage.this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(AddPost.this);
         builder.setCancelable(false);
         builder.setView(R.layout.user_dialog);
         dialog = builder.create();
@@ -151,7 +138,7 @@ public class AddImage extends AppCompatActivity {
                         @Override
                         public void onSuccess(Uri uri) {
                             imageLink = uri;
-                            Toast.makeText(AddImage.this, "Post is up!", Toast.LENGTH_LONG).show();
+                            Toast.makeText(AddPost.this, "Post is up!", Toast.LENGTH_LONG).show();
                             post = new Post(postLocation, desc_str,
                                     name_str, user, imageLink);
                             FirebaseMethods.generatePost(post);
@@ -171,7 +158,7 @@ public class AddImage extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode != RESULT_OK) {
-            Toast.makeText(AddImage.this, "Couldn't get image",
+            Toast.makeText(AddPost.this, "Couldn't get image",
                     Toast.LENGTH_SHORT).show();
         }
         else if (requestCode == REQUEST_STORAGE) {
@@ -190,7 +177,7 @@ public class AddImage extends AppCompatActivity {
                 image = (Bitmap) Objects.requireNonNull(data.getExtras()).get("data");
                 if (image.getByteCount() > Utils.MAX_IMAGE_SIZE)
                 {
-                    Toast.makeText(AddImage.this, "Image is too big!",
+                    Toast.makeText(AddPost.this, "Image is too big!",
                             Toast.LENGTH_SHORT).show();
                     image = null;
                 }
