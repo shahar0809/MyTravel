@@ -10,17 +10,20 @@ import androidx.preference.PreferenceFragmentCompat;
 
 import com.google.firebase.auth.FirebaseAuth;
 
-public class SettingsActivity extends AppCompatActivity {
+public class SettingsActivity extends AppCompatActivity
+{
     static final int LOG_OUT = 25;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.settings_activity);
 
     }
 
-    public void logOut(View view) {
+    public void logOut(View view)
+    {
         FirebaseAuth.getInstance().signOut();
         setResult(LOG_OUT);
         finish();

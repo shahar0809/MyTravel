@@ -29,6 +29,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.api.Status;
@@ -49,6 +50,7 @@ import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationBarView;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -66,27 +68,36 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 public class MainApp extends AppCompatActivity implements OnMapReadyCallback,
-        PlaceSelectionListener, GoogleMap.OnMapClickListener {
+        PlaceSelectionListener, GoogleMap.OnMapClickListener
+{
 
-    final static int REQUEST_LOC_PERMISSIONS = 5, ADD_POST = 6, SHOW_POST = 7, SETTINGS = 8;
+    final static int REQUEST_LOC_PERMISSIONS = 5, ADD_POST = 6, SETTINGS = 8;
     static ArrayList<User> subUsers = new ArrayList<>();
 
     SupportMapFragment mapFragment;
     GoogleMap mMap;
+
     User user;
     Post currPost;
     LatLng postLocation;
     Marker userMarker;
+    String currId;
+    String username;
+
     ClusterManager<Post> mClusterManager;
     AlertDialog dialog;
-    String currId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_app);
+        // Initializing the Maps API with the API key
         Places.initialize(getApplicationContext(), "@string/API_KEY");
+
+        // Starting background music service
+        Intent service = new Intent(this, MusicService.class);
+        startService(service);
 
         /* User loading dialog */
         AlertDialog.Builder builder = new AlertDialog.Builder(MainApp.this);
@@ -94,6 +105,11 @@ public class MainApp extends AppCompatActivity implements OnMapReadyCallback,
         builder.setView(R.layout.user_dialog);
         dialog = builder.create();
         dialog.show();
+
+        /* Extracting username from firebase auth */
+        username = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
+        TextView view = findViewById(R.id.username);
+        view.setText(username);
 
         initComponents();
 
@@ -103,10 +119,6 @@ public class MainApp extends AppCompatActivity implements OnMapReadyCallback,
         assert user != null;
         Log.d("user", user.getEmail());
 
-        Intent service = new Intent(this, pushService.class);
-        service.putExtra("currUser", user);
-        startService(service);
-
         // Requesting location permissions
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             requestPermissions(new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION}, REQUEST_LOC_PERMISSIONS);
@@ -115,16 +127,23 @@ public class MainApp extends AppCompatActivity implements OnMapReadyCallback,
         else { initMap(); }
     }
 
+    /*
+    Function to init the xml components, including the bottom navigation view.
+     */
     protected void initComponents()
     {
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigation);
-        bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
+        bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener()
+        {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                if (item.getItemId() == R.id.action_favorites) {
+                if (item.getItemId() == R.id.action_favorites)
+                {
                     viewAccount();
                     return true;
-                } else {
+                }
+                else
+                {
                     viewSettings();
                 }
                 return false;
@@ -133,7 +152,8 @@ public class MainApp extends AppCompatActivity implements OnMapReadyCallback,
     }
 
 
-    protected void initMap() {
+    protected void initMap()
+    {
         mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         assert mapFragment != null;
         mapFragment.getMapAsync(this);
@@ -152,27 +172,35 @@ public class MainApp extends AppCompatActivity implements OnMapReadyCallback,
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        if (requestCode == REQUEST_LOC_PERMISSIONS) {
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults)
+    {
+        if (requestCode == REQUEST_LOC_PERMISSIONS)
+        {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
                 initMap();
-            } else {
+            }
+            else
+            {
                 Toast.makeText(this, "Location permissions are not granted", Toast.LENGTH_SHORT).show();
             }
-        } else {
+        } else
+        {
             super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
     }
 
+    /* Event called when the map is fully loaded from the Maps API */
     @Override
-    public void onMapReady(GoogleMap googleMap) {
+    public void onMapReady(GoogleMap googleMap)
+    {
         mMap = googleMap;
         mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         mMap.getUiSettings().setZoomGesturesEnabled(true);
         mMap.setOnMapClickListener(this);
 
-        // Checking permissions
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        // Checking location permissions
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
 
@@ -189,15 +217,18 @@ public class MainApp extends AppCompatActivity implements OnMapReadyCallback,
         assert provider != null;
         Location location = locationManager.getLastKnownLocation(provider);
 
+        // Zooming map to the user's current location
         if (location != null) { zoomCamera(new LatLng(location.getLatitude(), location.getLongitude())); };
 
         /* Setting up marker clustering */
         mClusterManager = new ClusterManager<>(this, mMap);
         mClusterManager.setAnimation(true);
         mClusterManager.setOnClusterItemClickListener(
-                new ClusterManager.OnClusterItemClickListener<Post>() {
-                    @Override public boolean onClusterItemClick(Post clusterItem) {
-                        Log.d("help", "in");
+                new ClusterManager.OnClusterItemClickListener<Post>()
+                {
+                    /* Opens up a post view when a marker is clicked */
+                    @Override public boolean onClusterItemClick(Post clusterItem)
+                    {
                         Intent intent = new Intent(MainApp.this, showPost.class);
                         intent.putExtra("user", user);
                         intent.putExtra("post", (Post)clusterItem);
@@ -209,30 +240,37 @@ public class MainApp extends AppCompatActivity implements OnMapReadyCallback,
         mMap.setOnCameraIdleListener(mClusterManager);
         mMap.setOnMarkerClickListener(mClusterManager);
 
-        //googleMap.setOnInfoWindowClickListener(mClusterManager);
-
         getImages();
     }
 
+    /*
+    The function loads all posts from the Realtime Database into Post objects.
+    Then, it converts each post into a cluster item, and adds it to the map.
+     */
     public void getImages()
     {
         FirebaseDatabase mFirebaseDatabase = FirebaseDatabase.getInstance();
         DatabaseReference databaseReference = mFirebaseDatabase.getReference("Posts");
-        databaseReference.addValueEventListener(new ValueEventListener() {
+        databaseReference.addValueEventListener(new ValueEventListener()
+        {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot childDataSnapshot : dataSnapshot.getChildren()) {
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot)
+            {
+                for (DataSnapshot childDataSnapshot : dataSnapshot.getChildren())
+                {
                     if (dataSnapshot.getChildrenCount() > 0)
                     {
-                        for (DataSnapshot postSnapshot : childDataSnapshot.getChildren()) {
+                        for (DataSnapshot postSnapshot : childDataSnapshot.getChildren())
+                        {
+                            // Post id in firebase
                             currId = postSnapshot.getKey();
-                            // Constructing all parameters of post
+
+                            /* Constructing all parameters of post */
                             String name = postSnapshot.child("name").getValue(String.class);
                             String description = postSnapshot.child("description").getValue(String.class);
                             User owner = postSnapshot.child("owner").getValue(User.class);
                             String latitude = postSnapshot.child("location").child("latitude").getValue().toString();
                             String longitude = postSnapshot.child("location").child("longitude").getValue().toString();
-
                             LatLng location = new LatLng(Double.parseDouble(latitude), Double.parseDouble(longitude));
                             Uri imageLink = Uri.parse(postSnapshot.child("imageLink").getValue(String.class));
 
@@ -247,7 +285,8 @@ public class MainApp extends AppCompatActivity implements OnMapReadyCallback,
 
             }
             @Override
-            public void onCancelled(@NonNull DatabaseError firebaseError) {
+            public void onCancelled(@NonNull DatabaseError firebaseError)
+            {
                 Toast.makeText(MainApp.this, "Can't load posts", Toast.LENGTH_LONG).show();
                 Log.e("The read failed: ", firebaseError.getMessage());
                 dialog.dismiss();
@@ -258,10 +297,15 @@ public class MainApp extends AppCompatActivity implements OnMapReadyCallback,
         dialog.dismiss();
     }
 
+    /*
+    Event handler for when the user clicks a specific coordination on the map (not a marker).
+    The handler will add a temporary marker to mark the click's coordinations.
+     */
     public void onMapClick(final LatLng clickCoords)
     {
         if (clickCoords != null)
         {
+            // User has clicked a location, so now we just need to move it
             if (this.userMarker != null)
                 this.userMarker.remove();
 
@@ -288,12 +332,15 @@ public class MainApp extends AppCompatActivity implements OnMapReadyCallback,
     {
         super.onActivityResult(requestCode, resultCode, data);
 
+        /* Return to activity after adding a post */
         if (requestCode == ADD_POST && resultCode == RESULT_OK)
         {
             dialog.show();
             getImages();
             this.userMarker.remove();
-        } else if (requestCode == SETTINGS && resultCode == SettingsActivity.LOG_OUT)
+        }
+        /* Return to activity after logging out -> redirect to main activity */
+        else if (requestCode == SETTINGS && resultCode == SettingsActivity.LOG_OUT)
         {
             Intent intent = new Intent(this, Login.class);
             startActivity(intent);
@@ -302,16 +349,19 @@ public class MainApp extends AppCompatActivity implements OnMapReadyCallback,
     }
 
     @Override
-    public void onPlaceSelected(@NotNull Place place) {
+    public void onPlaceSelected(@NotNull Place place)
+    {
         LatLng placeSelected = place.getLatLng();
         zoomCamera(placeSelected);
     }
 
     @Override
-    public void onError(@NotNull Status status) {
+    public void onError(@NotNull Status status)
+    {
         Toast.makeText(MainApp.this, "Error while fetching location", Toast.LENGTH_LONG).show();
     }
 
+    /* OnClick handler for FAB. The handler redirects the user to the newPost activity */
     public void addPost(View view)
     {
         if (userMarker != null)
@@ -342,31 +392,14 @@ public class MainApp extends AppCompatActivity implements OnMapReadyCallback,
         startActivity(intent);
     }
 
-    protected void zoomCamera(LatLng location) {
+    /* Zooming map to specific coordinations */
+    protected void zoomCamera(LatLng location)
+    {
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location,15));
         // Zoom in, animating the camera.
         mMap.animateCamera(CameraUpdateFactory.zoomIn());
         // Zoom out to zoom level 10, animating with a duration of 2 seconds.
         mMap.animateCamera(CameraUpdateFactory.zoomTo(15), 2000, null);
-    }
-
-    private class RenderClusterInfoWindow extends DefaultClusterRenderer<Post> {
-
-        RenderClusterInfoWindow(Context context, GoogleMap map, ClusterManager<Post> clusterManager) {
-            super(context, map, clusterManager);
-        }
-
-        @Override
-        protected void onClusterRendered(Cluster<Post> cluster, Marker marker) {
-            super.onClusterRendered(cluster, marker);
-        }
-
-        @Override
-        protected void onBeforeClusterItemRendered(Post item, MarkerOptions markerOptions) {
-            markerOptions.title(item.getName());
-
-            super.onBeforeClusterItemRendered(item, markerOptions);
-        }
     }
 }
 

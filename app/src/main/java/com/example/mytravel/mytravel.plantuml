@@ -1,0 +1,306 @@
+@startuml
+
+title __MyTravel's Class Diagram__\n
+
+  namespace com.example.mytravel {
+    class com.example.mytravel.AddImage {
+        ~ Options : String[]
+        {static} ~ REQUEST_CAMERA : int
+        {static} ~ REQUEST_STORAGE : int
+        ~ description : TextInputLayout
+        ~ dialog : AlertDialog
+        ~ imageLink : Uri
+        ~ name : TextInputLayout
+        ~ window : Builder
+        - image : Bitmap
+        - postLocation : LatLng
+        + chooseImage()
+        + goBack()
+        + post()
+        # checkValidity()
+        # onActivityResult()
+        # onCreate()
+    }
+  }
+  
+
+  namespace com.example.mytravel {
+    class com.example.mytravel.BackgroundOfflineReceiver {
+        + onReceive()
+    }
+  }
+  
+
+  namespace com.example.mytravel {
+    class com.example.mytravel.FirebaseMethods {
+        {static} + followUser()
+        {static} + generatePost()
+        {static} + generateUser()
+        + likePost()
+        {static} + loadPosts()
+        {static} + unfollowUser()
+    }
+  }
+  
+
+  namespace com.example.mytravel {
+    class com.example.mytravel.Login {
+        {static} + MIN_PASSWORD_LEN : int
+        ~ auth : FirebaseAuth
+        ~ dialog : AlertDialog
+        ~ emailInput : TextInputLayout
+        ~ email_str : String
+        ~ passwordInput : TextInputLayout
+        ~ password_str : String
+        ~ username : String
+        + login()
+        + signUp()
+        # bindElements()
+        # onCreate()
+    }
+  }
+  
+
+  namespace com.example.mytravel {
+    class com.example.mytravel.MainActivity {
+        ~ authService : FirebaseAuth
+        ~ progressBar : LinearProgressIndicator
+        ~ username : String
+        # getCurrentUser()
+        # onCreate()
+    }
+  }
+  
+
+  namespace com.example.mytravel {
+    class com.example.mytravel.MainApp {
+        {static} ~ ADD_POST : int
+        {static} ~ REQUEST_LOC_PERMISSIONS : int
+        {static} ~ SETTINGS : int
+        ~ currId : String
+        ~ dialog : AlertDialog
+        ~ mClusterManager : ClusterManager<Post>
+        ~ mMap : GoogleMap
+        ~ mapFragment : SupportMapFragment
+        ~ postLocation : LatLng
+        {static} ~ subUsers : ArrayList<User>
+        ~ userMarker : Marker
+        ~ username : String
+        + addMarker()
+        + addPost()
+        + getImages()
+        + onError()
+        + onMapClick()
+        + onMapReady()
+        + onPlaceSelected()
+        + onRequestPermissionsResult()
+        + viewAccount()
+        + viewSettings()
+        # initComponents()
+        # initMap()
+        # onActivityResult()
+        # onCreate()
+        # zoomCamera()
+    }
+  }
+  
+
+  namespace com.example.mytravel {
+    class com.example.mytravel.OfflineActivity {
+        + checkConnection()
+        # onCreate()
+    }
+  }
+  
+
+  namespace com.example.mytravel {
+    class com.example.mytravel.OfflineBroadcastReceiver {
+        + OfflineBroadcastReceiver()
+        + onReceive()
+    }
+  }
+  
+
+  namespace com.example.mytravel {
+    class com.example.mytravel.Post {
+        {static} + CREATOR : Creator<Post>
+        ~ description : String
+        ~ id : String
+        ~ imageLink : String
+        ~ location : LatLng
+        ~ name : String
+        + Post()
+        + Post()
+        + Post()
+        + Post()
+        + describeContents()
+        + getDescription()
+        + getId()
+        + getImageLink()
+        + getLocation()
+        + getName()
+        + getOwner()
+        + getPosition()
+        + getSnippet()
+        + getTitle()
+        + setName()
+        + writeToParcel()
+        # Post()
+    }
+  }
+  
+
+  namespace com.example.mytravel {
+    class com.example.mytravel.SettingsActivity {
+        {static} ~ LOG_OUT : int
+        + changePassword()
+        + goBack()
+        + logOut()
+        # onCreate()
+    }
+  }
+  
+
+  namespace com.example.mytravel {
+    class com.example.mytravel.ShowUser {
+        ~ followButton : Button
+        ~ followersCount : long
+        ~ followersCounter : TextView
+        ~ followingCount : long
+        ~ followingCounter : TextView
+        ~ isFollowing : Boolean
+        ~ postsCount : long
+        ~ postsCounter : TextView
+        ~ username : TextView
+        + checkFollows()
+        + follow()
+        + goBack()
+        # countFollowers()
+        # countFollowing()
+        # countPosts()
+        # onCreate()
+    }
+  }
+  
+
+  namespace com.example.mytravel {
+    class com.example.mytravel.SignUp {
+        ~ auth : FirebaseAuth
+        ~ dialog : AlertDialog
+        ~ emailInput : TextInputLayout
+        ~ email_str : String
+        ~ passwordInput : TextInputLayout
+        ~ password_str : String
+        ~ usernameInput : TextInputLayout
+        ~ username_str : String
+        + signIn()
+        + signUp()
+        # bindElements()
+        # onCreate()
+    }
+  }
+  
+
+  namespace com.example.mytravel {
+    class com.example.mytravel.User {
+        {static} + CREATOR : Creator<User>
+        ~ email : String
+        ~ username : String
+        + User()
+        + User()
+        + User()
+        + describeContents()
+        + getEmail()
+        + getUsername()
+        + setUsername()
+        + writeToParcel()
+        # User()
+    }
+  }
+  
+
+  namespace com.example.mytravel {
+    class com.example.mytravel.Utils {
+        {static} + MAX_IMAGE_SIZE : long
+        {static} + ONE_MEGABYTE : long
+        {static} + BitmapFromVector()
+        {static} + checkConnection()
+    }
+  }
+  
+
+  namespace com.example.mytravel {
+    class com.example.mytravel.pushService {
+        ~ subbedUsers : ArrayList<User>
+        ~ userRef : DatabaseReference
+        + addListeners()
+        + onBind()
+        + onCancelled()
+        + onChildAdded()
+        + onChildChanged()
+        + onChildMoved()
+        + onChildRemoved()
+        + onCreate()
+        + onDestroy()
+        + onStartCommand()
+    }
+  }
+  
+
+  namespace com.example.mytravel {
+    class com.example.mytravel.showPost {
+        ~ descBox : TextView
+        ~ dialog : AlertDialog
+        ~ image : ImageView
+        ~ nameBox : TextView
+        ~ profileButton : ImageButton
+        ~ userBox : TextView
+        - mDatabase : FirebaseStorage
+        + fetchImage()
+        + goBack()
+        + goToProfile()
+        # fillAttributes()
+        # onCreate()
+    }
+  }
+  
+
+  com.example.mytravel.AddImage --up--|> androidx.appcompat.app.AppCompatActivity
+  com.example.mytravel.AddImage o-- com.example.mytravel.Post : post
+  com.example.mytravel.AddImage o-- com.example.mytravel.User : user
+  com.example.mytravel.BackgroundOfflineReceiver -up--|> android.content.BroadcastReceiver
+  com.example.mytravel.Login --up--|> androidx.appcompat.app.AppCompatActivity
+  com.example.mytravel.MainActivity --up-|> androidx.appcompat.app.AppCompatActivity
+  com.example.mytravel.MainApp .up..|> com.google.android.gms.maps.GoogleMap.OnMapClickListener
+  com.example.mytravel.MainApp .up..|> com.google.android.gms.maps.OnMapReadyCallback
+  com.example.mytravel.MainApp .up..|> com.google.android.libraries.places.widget.listener.PlaceSelectionListener
+  com.example.mytravel.MainApp -up--|> androidx.appcompat.app.AppCompatActivity
+  com.example.mytravel.MainApp o-- com.example.mytravel.Post : currPost
+  com.example.mytravel.MainApp o-- com.example.mytravel.User : user
+  com.example.mytravel.OfflineActivity -up--|> androidx.appcompat.app.AppCompatActivity
+  com.example.mytravel.OfflineBroadcastReceiver -up--|> android.content.BroadcastReceiver
+  com.example.mytravel.Post .up..|> android.os.Parcelable
+  com.example.mytravel.Post .up..|> com.google.maps.android.clustering.ClusterItem
+  com.example.mytravel.Post o-- com.example.mytravel.User : owner
+  com.example.mytravel.SettingsActivity -up--|> androidx.appcompat.app.AppCompatActivity
+  com.example.mytravel.ShowUser --up--|> androidx.appcompat.app.AppCompatActivity
+  com.example.mytravel.ShowUser o-- com.example.mytravel.User : currUser
+  com.example.mytravel.ShowUser o-- com.example.mytravel.User : inputUser
+  com.example.mytravel.SignUp --up--|> androidx.appcompat.app.AppCompatActivity
+  com.example.mytravel.User .up..|> android.os.Parcelable
+  com.example.mytravel.pushService .up..|> com.google.firebase.database.ChildEventListener
+  com.example.mytravel.pushService --up--|> android.app.Service
+  com.example.mytravel.pushService o-- com.example.mytravel.User : currUser
+  com.example.mytravel.showPost --up--|> androidx.appcompat.app.AppCompatActivity
+  com.example.mytravel.showPost o-- com.example.mytravel.User : currUser
+  com.example.mytravel.showPost o-- com.example.mytravel.Post : post
+
+
+right footer
+
+
+PlantUML diagram generated by SketchIt! (https://bitbucket.org/pmesmeur/sketch.it)
+For more information about this tool, please contact philippe.mesmeur@gmail.com
+endfooter
+
+@enduml

@@ -25,13 +25,14 @@ public class ShowUser extends AppCompatActivity {
     TextView username, postsCounter, followersCounter, followingCounter;
     Button followButton;
     Boolean isFollowing = false;
-    Service notificationService;
+
     long followersCount = 0;
     long followingCount = 0;
     long postsCount = 0;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_user);
 
@@ -177,5 +178,21 @@ public class ShowUser extends AppCompatActivity {
 
     public void goBack(View view) {
         finish();
+    }
+
+    public void showFollowers(View view)
+    {
+        Intent intent = new Intent(this, ShowUsers.class);
+        intent.putExtra("currUser", currUser);
+        intent.putExtra("usersAction", "Followers");
+        startActivity(intent);
+    }
+
+    public void showFollowing(View view)
+    {
+        Intent intent = new Intent(this, ShowUsers.class);
+        intent.putExtra("currUser", currUser);
+        intent.putExtra("usersAction", "Following");
+        startActivity(intent);
     }
 }

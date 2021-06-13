@@ -36,9 +36,6 @@ public class MainActivity extends AppCompatActivity {
         OfflineBroadcastReceiver offlineForeground = new OfflineBroadcastReceiver();
         IntentFilter filter = new IntentFilter();
         filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
-        //filter.addAction(WifiManager.WIFI_STATE_CHANGED_ACTION);
-        //filter.addAction(WifiManager.NETWORK_STATE_CHANGED_ACTION);
-        //filter.addAction(Intent.ACTION_AIRPLANE_MODE_CHANGED);
         registerReceiver(offlineForeground, filter);
 
         authService = FirebaseAuth.getInstance();
@@ -48,10 +45,11 @@ public class MainActivity extends AppCompatActivity {
     protected void getCurrentUser()
     {
         final FirebaseUser loggedUser = authService.getCurrentUser();
-
-        if (loggedUser != null)
+        Intent intent = new Intent(MainActivity.this, Login.class);
+        startActivity(intent);
+        /*if (loggedUser != null)
         {
-            Log.d("logged", "there is logged user");
+            Log.d("logged", "there is a logged user");
             FirebaseDatabase mFirebaseDatabase = FirebaseDatabase.getInstance();
             DatabaseReference databaseReference = mFirebaseDatabase.getReference("Users");
             databaseReference.addValueEventListener(new ValueEventListener()
@@ -87,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
             {
             Intent intent = new Intent(MainActivity.this, Login.class);
             startActivity(intent);
-        }
+        }*/
     }
 
 }

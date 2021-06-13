@@ -25,18 +25,6 @@
             android:src="@drawable/arrow_back"
             android:layout_gravity="top"
             android:onClick="goBack" />
-
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingVertical="3dp"
-            android:paddingHorizontal="3dp"
-            android:textColor="#FFFFFF"
-            android:background="@drawable/button_effect"
-            style="@style/TextViewStyle"
-            android:src="@drawable/like"
-            android:layout_alignParentRight="true"
-            android:onClick="likePost" />
     </RelativeLayout>
 
     <Space

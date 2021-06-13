@@ -20,11 +20,11 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.database.DatabaseError;
 
-public class SignUp extends Activity
+public class SignUp extends AppCompatActivity
 {
     FirebaseAuth auth;
-    FirebaseMethods firebaseMethods;
     AlertDialog dialog;
 
     /* Elements in xml */
@@ -39,7 +39,6 @@ public class SignUp extends Activity
         bindElements();
 
         auth = FirebaseAuth.getInstance();
-        firebaseMethods = new FirebaseMethods();
 
         /* User loading dialog */
         AlertDialog.Builder builder = new AlertDialog.Builder(SignUp.this);
@@ -55,7 +54,7 @@ public class SignUp extends Activity
         passwordInput = findViewById(R.id.passwordField);
     }
 
-    public void sign_up(View view)
+    public void signUp(View view)
     {
         dialog.show();
 
@@ -97,11 +96,11 @@ public class SignUp extends Activity
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task)
                     {
-                        //Log.i("error is :", task.getException().getMessage());
+                        Log.i("error is :", task.getException().getMessage());
                         Toast.makeText(SignUp.this, "createUserWithEmail:onComplete:" + task.isSuccessful(), Toast.LENGTH_SHORT).show();
                         dialog.dismiss();
                         User user = new User(username_str,  email_str);
-                        firebaseMethods.generateUser(username_str, email_str);
+                        FirebaseMethods.generateUser(username_str, email_str);
 
                         if (!task.isSuccessful()) {
                             dialog.dismiss();
@@ -121,5 +120,10 @@ public class SignUp extends Activity
                     }
                 });
 
+    }
+
+    public void signIn(View view)
+    {
+        finish();
     }
 }

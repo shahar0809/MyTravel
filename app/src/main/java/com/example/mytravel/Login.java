@@ -57,7 +57,6 @@ public class Login extends AppCompatActivity
         passwordInput = findViewById(R.id.passwordField);
     }
 
-
     public void login(View view)
     {
         dialog.show();
@@ -132,5 +131,10 @@ public class Login extends AppCompatActivity
     {
         Intent intent = new Intent(this, SignUp.class);
         startActivity(intent);
+    }
+
+    public void resetPassword(View view)
+    {
+
     }
 }
