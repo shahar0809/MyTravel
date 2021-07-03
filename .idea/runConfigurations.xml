@@ -3,9 +3,13 @@
   <component name="RunConfigurationProducerService">
     <option name="ignoredProducers">
       <set>
+<<<<<<< HEAD
         <option value="org.jetbrains.plugins.gradle.execution.test.runner.AllInPackageGradleConfigurationProducer" />
         <option value="org.jetbrains.plugins.gradle.execution.test.runner.TestClassGradleConfigurationProducer" />
         <option value="org.jetbrains.plugins.gradle.execution.test.runner.TestMethodGradleConfigurationProducer" />
+=======
+        <option value="com.android.tools.idea.compose.preview.runconfiguration.ComposePreviewRunConfigurationProducer" />
+>>>>>>> 9b590618853e6485970153349a327e1f788f0947
       </set>
     </option>
   </component>
