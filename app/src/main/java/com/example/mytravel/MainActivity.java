@@ -42,6 +42,10 @@ public class MainActivity extends AppCompatActivity {
         getCurrentUser();
     }
 
+    /**
+     * Get the current logged in user from firebase auth.
+     * If there's no logged user, the function opens a login screen.
+     */
     protected void getCurrentUser()
     {
         final FirebaseUser loggedUser = authService.getCurrentUser();

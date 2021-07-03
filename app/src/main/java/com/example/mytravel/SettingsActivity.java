@@ -24,7 +24,10 @@ public class SettingsActivity extends AppCompatActivity implements CompoundButto
         setContentView(R.layout.settings_activity);
 
         music = findViewById(R.id.musicSwitch);
+        music.setChecked(MusicService.mPlayer.isPlaying());
         music.setOnCheckedChangeListener(this);
+
+
     }
 
     public void logOut(View view)
@@ -43,6 +46,11 @@ public class SettingsActivity extends AppCompatActivity implements CompoundButto
     }
 
     @Override
+    /**
+     * Event handler function for when the switch button of the background music is changed.
+     * If the new state is checked -> The music service needs to be started.
+     * If the new state is not checked -> The music service needs to be stopped.
+     */
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         Intent intent = new Intent(this, MusicService.class);
         if(isChecked)

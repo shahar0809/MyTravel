@@ -8,7 +8,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.maps.android.clustering.ClusterItem;
 
 /**
- * A class that represents a post created bu the user.
+ * A class that represents a post created by the user.
  * Each post contains:
  * location: The exact coordination of the post
  * description: A short sentence to describe the post.

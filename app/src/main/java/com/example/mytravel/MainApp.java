@@ -107,8 +107,8 @@ public class MainApp extends AppCompatActivity implements OnMapReadyCallback,
         else { initMap(); }
     }
 
-    /*
-    Function to init the xml components, including the bottom navigation view.
+    /**
+     * Function to init the xml components, including the bottom navigation view.
      */
     protected void initComponents()
     {
@@ -132,6 +132,10 @@ public class MainApp extends AppCompatActivity implements OnMapReadyCallback,
     }
 
 
+    /**
+     * Initializing the map by specifying the type of map, and calling the Maps API
+     * to prepare the map asynchronically.
+     */
     protected void initMap()
     {
         mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
@@ -169,7 +173,10 @@ public class MainApp extends AppCompatActivity implements OnMapReadyCallback,
         }
     }
 
-    /* Event called when the map is fully loaded from the Maps API */
+    /**
+     * Event handler function that's called when the map is fully loaded from the Maps API
+     * @param googleMap: The map loaded
+     */
     @Override
     public void onMapReady(GoogleMap googleMap)
     {
@@ -223,9 +230,9 @@ public class MainApp extends AppCompatActivity implements OnMapReadyCallback,
         getImages();
     }
 
-    /*
-    The function loads all posts from the Realtime Database into Post objects.
-    Then, it converts each post into a cluster item, and adds it to the map.
+    /**
+     * The function loads all posts from the Realtime Database into Post objects.
+     * Then, it converts each post into a cluster item, and adds it to the map.
      */
     public void getImages()
     {
@@ -277,9 +284,10 @@ public class MainApp extends AppCompatActivity implements OnMapReadyCallback,
         dialog.dismiss();
     }
 
-    /*
-    Event handler for when the user clicks a specific coordination on the map (not a marker).
-    The handler will add a temporary marker to mark the click's coordinations.
+    /**
+     * Event handler for when the user clicks a specific coordination on the map (not a marker).
+     * The handler will add a temporary marker to mark the click's coordination.
+     * @param clickCoords: The coordination of the click
      */
     public void onMapClick(final LatLng clickCoords)
     {
@@ -302,6 +310,10 @@ public class MainApp extends AppCompatActivity implements OnMapReadyCallback,
         }
     }
 
+    /**
+     * Adds a marker to a post on the map.
+     * @param post
+     */
     public void addMarker(Post post)
     {
         mClusterManager.addItem(post);
@@ -341,7 +353,10 @@ public class MainApp extends AppCompatActivity implements OnMapReadyCallback,
         Toast.makeText(MainApp.this, "Error while fetching location", Toast.LENGTH_LONG).show();
     }
 
-    /* OnClick handler for FAB. The handler redirects the user to the newPost activity */
+    /**
+     * OnClick handler for FAB. The handler redirects the user to the newPost activity
+     * @param view The FAB
+     */
     public void addPost(View view)
     {
         if (userMarker != null)
@@ -372,7 +387,10 @@ public class MainApp extends AppCompatActivity implements OnMapReadyCallback,
         startActivity(intent);
     }
 
-    /* Zooming map to specific coordinations */
+    /**
+     * Zooming map to specific coordination
+     * @param location the location
+     */
     protected void zoomCamera(LatLng location)
     {
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location,15));

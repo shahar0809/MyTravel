@@ -8,14 +8,14 @@ import com.google.firebase.database.DataSnapshot;
 
 import java.util.TreeMap;
 
+/**
+ * A class that represents a user in the system.
+ * Each user has:
+ * username: The user's display name
+ * email: The user's email
+ */
 public class User implements Parcelable
 {
-    /**
-     * A class that represents a user in the system.
-     * Each user has:
-     * username: The user's display name
-     * email: The user's email
-     */
     String username;
     String email;
 

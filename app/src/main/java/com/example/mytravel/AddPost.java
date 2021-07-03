@@ -73,7 +73,7 @@ public class AddPost extends AppCompatActivity {
                 {
                     Intent pickPhoto = new Intent(Intent.ACTION_PICK,
                             android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                    startActivityForResult(pickPhoto , REQUEST_STORAGE);//one can be replaced with any action code
+                    startActivityForResult(pickPhoto , REQUEST_STORAGE);
                 }
                 else if(which == 1)
                 {
@@ -90,9 +90,15 @@ public class AddPost extends AppCompatActivity {
         window.show();
     }
 
+    /**
+     * Checking that the fields are not empty.
+     * @param name The name field
+     * @param desc The description field
+     * @return If the fields are empty
+     */
     protected boolean checkValidity(String name, String desc)
     {
-        /* Checking that the fields are not empty */
+
         if (TextUtils.isEmpty(name))
         {
             Toast.makeText(getApplicationContext(), "Enter name!", Toast.LENGTH_SHORT).show();
@@ -102,6 +108,12 @@ public class AddPost extends AppCompatActivity {
         return true;
     }
 
+    /**
+     * Uploads a post when the user clicks the button.
+     * Uploads post fields to realtime database.
+     * Uploads the post image to storage.
+     * @param view The button clicked
+     */
     public void post(View view)
     {
         dialog.show();
@@ -124,13 +136,16 @@ public class AddPost extends AppCompatActivity {
             byte[] data = baos.toByteArray();
 
             UploadTask uploadTask = userRef.putBytes(data);
-            uploadTask.addOnFailureListener(new OnFailureListener() {
+            uploadTask.addOnFailureListener(new OnFailureListener()
+            {
                 @Override
-                public void onFailure(@NonNull Exception exception) {
+                public void onFailure(@NonNull Exception exception)
+                {
                     dialog.dismiss();
                     Toast.makeText(getApplicationContext(), "Error uploading image", Toast.LENGTH_SHORT).show();
                 }
-            }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>()
+                    {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                     userRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>()
@@ -138,11 +153,11 @@ public class AddPost extends AppCompatActivity {
                         @Override
                         public void onSuccess(Uri uri) {
                             imageLink = uri;
-                            Toast.makeText(AddPost.this, "Post is up!", Toast.LENGTH_LONG).show();
                             post = new Post(postLocation, desc_str,
                                     name_str, user, imageLink);
                             FirebaseMethods.generatePost(post);
                             dialog.dismiss();
+                            Toast.makeText(AddPost.this, "Post is up!", Toast.LENGTH_LONG).show();
                             setResult(RESULT_OK);
                             finish();
                         }

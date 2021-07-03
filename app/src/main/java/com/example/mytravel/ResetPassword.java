@@ -38,6 +38,10 @@ public class ResetPassword extends AppCompatActivity
         dialog = builder.create();
     }
 
+    /**
+     * Sends a password reset email using firebase authentication on button click.
+     * @param view The button clicked (reset password)
+     */
     public void resetPassword(View view)
     {
         dialog.show();

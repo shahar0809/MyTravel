@@ -51,12 +51,21 @@ public class Login extends AppCompatActivity
         dialog = builder.create();
     }
 
+    /**
+     * Binds the xml elements to the objects in the activity.
+     */
     protected void bindElements()
     {
         emailInput = findViewById(R.id.emailField);
         passwordInput = findViewById(R.id.passwordField);
     }
 
+    /**
+     * Logs in with email and password using firebase authentication.
+     * Also, it fetches the username from the user node in the realtime database.
+     * If the fields are empty, the function makes a matching toast.
+     * @param view The button clicked to log in.
+     */
     public void login(View view)
     {
         dialog.show();

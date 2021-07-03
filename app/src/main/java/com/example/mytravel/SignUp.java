@@ -47,6 +47,9 @@ public class SignUp extends AppCompatActivity
         dialog = builder.create();
     }
 
+    /**
+     * Binds the xml elements to the components in the activity.
+     */
     protected void bindElements()
     {
         usernameInput = findViewById(R.id.usernameField);
@@ -54,6 +57,12 @@ public class SignUp extends AppCompatActivity
         passwordInput = findViewById(R.id.passwordField);
     }
 
+    /**
+     * Creates a new user using firebase auth.
+     * Also, creates a user node in realtime database to save the username.
+     * If the fields are empty, the function makes a matching toast.
+     * @param view
+     */
     public void signUp(View view)
     {
         dialog.show();

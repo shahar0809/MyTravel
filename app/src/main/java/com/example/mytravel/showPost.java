@@ -63,6 +63,9 @@ public class showPost extends AppCompatActivity
         fillAttributes();
     }
 
+    /**
+     * Adds the post fields to the components on the screen.
+     */
     protected void fillAttributes() {
         nameBox.setText(post.getName());
         descBox.setText(post.getDescription());
@@ -70,6 +73,9 @@ public class showPost extends AppCompatActivity
         fetchImage();
     }
 
+    /**
+     * Fetches an image from a link in firebase storage, and shows it in ImageView.
+     */
     public void fetchImage() {
         mDatabase = FirebaseStorage.getInstance();
         StorageReference storage = mDatabase.getReferenceFromUrl(post.getImageLink());
@@ -102,6 +108,10 @@ public class showPost extends AppCompatActivity
         //FirebaseDatabase.likePost(vie)
     }*/
 
+    /**
+     * Shows profile page of the user clicked.
+     * @param view The profile button
+     */
     public void goToProfile(View view) {
         Intent intent = new Intent(this, ShowUser.class);
         intent.putExtra("currUser", currUser);

@@ -15,9 +15,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.maps.android.clustering.ClusterManager;
 
-/*
-Methods to upload Classes and data to firebase Realtime Database.
-The class pushed the classes in JSON format, while choosing the key in firebase.
+/**
+ * Methods to upload Classes and data to firebase Realtime Database.
+ * The class pushed the classes in JSON format, while choosing the key in firebase.
  */
 public class FirebaseMethods
 {
@@ -37,15 +37,13 @@ public class FirebaseMethods
     /**
      * Creates a new post node in the posts node, with the key generated.
      * @param post The post objects that contains all of the post's attributes
-     * @return The key of the post node
      */
-    public static String generatePost(Post post)
+    public static void generatePost(Post post)
     {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference posts = database.getReference("Posts");
         DatabaseReference userRef = posts.child(post.getOwner().getUsername());
-        userRef.push().setValue(post);
-        return userRef.getKey();
+        userRef.child(post.getName()).setValue(post);
     }
 
     /**

@@ -3,7 +3,7 @@
 title __MYTRAVEL.APP's Class Diagram__\n
 
   namespace com.example.mytravel {
-    class com.example.mytravel.AddImage {
+    class com.example.mytravel.AddPost {
     }
   }
   
@@ -104,9 +104,9 @@ title __MYTRAVEL.APP's Class Diagram__\n
   }
   
 
-  com.example.mytravel.AddImage -up-|> androidx.appcompat.app.AppCompatActivity
-  com.example.mytravel.AddImage o-- com.example.mytravel.Post : post
-  com.example.mytravel.AddImage o-- com.example.mytravel.User : user
+  com.example.mytravel.AddPost -up-|> androidx.appcompat.app.AppCompatActivity
+  com.example.mytravel.AddPost o-- com.example.mytravel.Post : post
+  com.example.mytravel.AddPost o-- com.example.mytravel.User : user
   com.example.mytravel.Login -up-|> androidx.appcompat.app.AppCompatActivity
   com.example.mytravel.MainActivity -up-|> androidx.appcompat.app.AppCompatActivity
   com.example.mytravel.MainApp .up.|> com.google.android.gms.maps.GoogleMap.OnMapClickListener

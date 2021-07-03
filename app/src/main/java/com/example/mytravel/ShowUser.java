@@ -72,6 +72,10 @@ public class ShowUser extends AppCompatActivity {
         }
     }
 
+    /**
+     * Checks if the current user follows the user in the profile page.
+     * It checks in the current user's 'Following' node.
+     */
     public void checkFollows()
     {
         FirebaseDatabase mFirebaseDatabase = FirebaseDatabase.getInstance();
@@ -103,6 +107,11 @@ public class ShowUser extends AppCompatActivity {
         });
     }
 
+    /**
+     * Event handler for when the follow button is clicked.
+     * The function calls follow of firebase methods, which adds the current user as a follower.
+     * @param view
+     */
     public void follow(View view)
     {
         // Unfollowing
@@ -122,6 +131,10 @@ public class ShowUser extends AppCompatActivity {
         }
     }
 
+    /**
+     * Counts how many followers the profile user has.
+     * It does so by checking the children count in the profile user's followers node.
+     */
     protected void countFollowers()
     {
         FirebaseDatabase mFirebaseDatabase = FirebaseDatabase.getInstance();
@@ -140,6 +153,10 @@ public class ShowUser extends AppCompatActivity {
         });
     }
 
+    /**
+     * Counts how many users the profiel user is following.
+     * It does so by checking the children count in the profile user's following node.
+     */
     protected void countFollowing()
     {
         FirebaseDatabase mFirebaseDatabase = FirebaseDatabase.getInstance();
@@ -158,6 +175,10 @@ public class ShowUser extends AppCompatActivity {
         });
     }
 
+    /**
+     * Counts how many posts the profile user has.
+     * It does so by checking the children count in posts, in the profile user's node.
+     */
     protected void countPosts()
     {
         FirebaseDatabase mFirebaseDatabase = FirebaseDatabase.getInstance();

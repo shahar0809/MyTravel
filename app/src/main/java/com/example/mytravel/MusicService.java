@@ -10,7 +10,7 @@ Service that will play background music while using the app.
  */
 public class MusicService extends Service
 {
-    private MediaPlayer mPlayer;
+    public static MediaPlayer mPlayer;
     private final static int MAX_VOLUME = 100;
     public static int currVolume = MAX_VOLUME;
 
@@ -46,6 +46,11 @@ public class MusicService extends Service
         {
             mPlayer.start();
         }
+    }
+
+    public boolean isPlaying()
+    {
+        return mPlayer.isPlaying();
     }
 
 

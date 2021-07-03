@@ -3,7 +3,7 @@
 title __MYTRAVEL's Class Diagram__\n
 
   namespace com.example.mytravel {
-    class com.example.mytravel.AddImage {
+    class com.example.mytravel.AddPost {
         ~ Options : String[]
         {static} ~ REQUEST_CAMERA : int
         {static} ~ REQUEST_STORAGE : int
@@ -101,8 +101,9 @@ title __MYTRAVEL's Class Diagram__\n
   namespace com.example.mytravel {
     class com.example.mytravel.MusicService {
         {static} + currVolume : int
+        {static} + mPlayer : MediaPlayer
         {static} - MAX_VOLUME : int
-        - mPlayer : MediaPlayer
+        + isPlaying()
         + onBind()
         + onCreate()
         + onDestroy()
@@ -267,32 +268,32 @@ title __MYTRAVEL's Class Diagram__\n
   }
   
 
-  com.example.mytravel.AddImage -up--|> androidx.appcompat.app.AppCompatActivity
-  com.example.mytravel.AddImage o-- com.example.mytravel.Post : post
-  com.example.mytravel.AddImage o-- com.example.mytravel.User : user
-  com.example.mytravel.Login -up--|> androidx.appcompat.app.AppCompatActivity
-  com.example.mytravel.MainActivity -up--|> androidx.appcompat.app.AppCompatActivity
-  com.example.mytravel.MainApp .up..|> com.google.android.gms.maps.GoogleMap.OnMapClickListener
-  com.example.mytravel.MainApp .up..|> com.google.android.gms.maps.OnMapReadyCallback
-  com.example.mytravel.MainApp .up..|> com.google.android.libraries.places.widget.listener.PlaceSelectionListener
-  com.example.mytravel.MainApp -up--|> androidx.appcompat.app.AppCompatActivity
+  com.example.mytravel.AddPost -up-|> androidx.appcompat.app.AppCompatActivity
+  com.example.mytravel.AddPost o-- com.example.mytravel.Post : post
+  com.example.mytravel.AddPost o-- com.example.mytravel.User : user
+  com.example.mytravel.Login -up-|> androidx.appcompat.app.AppCompatActivity
+  com.example.mytravel.MainActivity -up-|> androidx.appcompat.app.AppCompatActivity
+  com.example.mytravel.MainApp .up.|> com.google.android.gms.maps.GoogleMap.OnMapClickListener
+  com.example.mytravel.MainApp .up.|> com.google.android.gms.maps.OnMapReadyCallback
+  com.example.mytravel.MainApp .up.|> com.google.android.libraries.places.widget.listener.PlaceSelectionListener
+  com.example.mytravel.MainApp -up-|> androidx.appcompat.app.AppCompatActivity
   com.example.mytravel.MainApp o-- com.example.mytravel.Post : currPost
   com.example.mytravel.MainApp o-- com.example.mytravel.User : user
-  com.example.mytravel.MusicService -up--|> android.app.Service
-  com.example.mytravel.OfflineActivity -up--|> androidx.appcompat.app.AppCompatActivity
-  com.example.mytravel.OfflineBroadcastReceiver -up--|> android.content.BroadcastReceiver
-  com.example.mytravel.Post .up..|> android.os.Parcelable
-  com.example.mytravel.Post .up..|> com.google.maps.android.clustering.ClusterItem
+  com.example.mytravel.MusicService -up-|> android.app.Service
+  com.example.mytravel.OfflineActivity -up-|> androidx.appcompat.app.AppCompatActivity
+  com.example.mytravel.OfflineBroadcastReceiver -up-|> android.content.BroadcastReceiver
+  com.example.mytravel.Post .up.|> android.os.Parcelable
+  com.example.mytravel.Post .up.|> com.google.maps.android.clustering.ClusterItem
   com.example.mytravel.Post o-- com.example.mytravel.User : owner
-  com.example.mytravel.ResetPassword -up--|> androidx.appcompat.app.AppCompatActivity
-  com.example.mytravel.SettingsActivity .up..|> android.widget.CompoundButton.OnCheckedChangeListener
-  com.example.mytravel.SettingsActivity -up--|> androidx.appcompat.app.AppCompatActivity
-  com.example.mytravel.ShowUser -up--|> androidx.appcompat.app.AppCompatActivity
+  com.example.mytravel.ResetPassword -up-|> androidx.appcompat.app.AppCompatActivity
+  com.example.mytravel.SettingsActivity .up.|> android.widget.CompoundButton.OnCheckedChangeListener
+  com.example.mytravel.SettingsActivity -up-|> androidx.appcompat.app.AppCompatActivity
+  com.example.mytravel.ShowUser -up-|> androidx.appcompat.app.AppCompatActivity
   com.example.mytravel.ShowUser o-- com.example.mytravel.User : currUser
   com.example.mytravel.ShowUser o-- com.example.mytravel.User : inputUser
-  com.example.mytravel.SignUp -up--|> androidx.appcompat.app.AppCompatActivity
-  com.example.mytravel.User .up..|> android.os.Parcelable
-  com.example.mytravel.showPost -up--|> androidx.appcompat.app.AppCompatActivity
+  com.example.mytravel.SignUp -up-|> androidx.appcompat.app.AppCompatActivity
+  com.example.mytravel.User .up.|> android.os.Parcelable
+  com.example.mytravel.showPost -up-|> androidx.appcompat.app.AppCompatActivity
   com.example.mytravel.showPost o-- com.example.mytravel.User : currUser
   com.example.mytravel.showPost o-- com.example.mytravel.Post : post
 
