@@ -49,8 +49,7 @@ public class MainActivity extends AppCompatActivity {
     protected void getCurrentUser()
     {
         final FirebaseUser loggedUser = authService.getCurrentUser();
-        Intent intent = new Intent(MainActivity.this, Login.class);
-        startActivity(intent);
+
         if (loggedUser != null)
         {
             Log.d("logged", "there is a logged user");
@@ -61,22 +60,24 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot)
                 {
+                    User currUser;
+
                     for (DataSnapshot childDataSnapshot : dataSnapshot.getChildren())
                     {
-                        User user = childDataSnapshot.getValue(User.class);
-                        assert user != null;
+                        currUser = childDataSnapshot.getValue(User.class);
+                        assert currUser != null;
                         Log.d("email", loggedUser.getEmail());
-                        if (user.getEmail().equals(loggedUser.getEmail()))
+                        if (currUser.getEmail().equals(loggedUser.getEmail()))
                         {
-                            username = user.getUsername();
+                            username = currUser.getUsername();
                         }
-
-                        user = new User(username, loggedUser.getEmail());
-                        Intent intent = new Intent(MainActivity.this, MainApp.class);
-                        intent.putExtra("user", user);
-                        startActivity(intent);
-                        finish();
                     }
+
+                    currUser = new User(username, loggedUser.getEmail());
+                    Intent intent = new Intent(MainActivity.this, MainApp.class);
+                    intent.putExtra("user", currUser);
+                    startActivity(intent);
+                    finish();
 
                 }
                 @Override
@@ -87,8 +88,8 @@ public class MainActivity extends AppCompatActivity {
         }
         else
             {
-            Intent i = new Intent(MainActivity.this, Login.class);
-            startActivity(i);
+            Intent intent = new Intent(MainActivity.this, Login.class);
+            startActivity(intent);
         }
     }
 

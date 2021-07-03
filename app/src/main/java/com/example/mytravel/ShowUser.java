@@ -102,7 +102,7 @@ public class ShowUser extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(ShowUser.this, "Can't load users", Toast.LENGTH_LONG).show();
+                //Toast.makeText(ShowUser.this, "Can't load users", Toast.LENGTH_LONG).show();
             }
         });
     }

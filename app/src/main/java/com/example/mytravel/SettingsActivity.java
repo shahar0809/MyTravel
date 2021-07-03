@@ -32,6 +32,9 @@ public class SettingsActivity extends AppCompatActivity implements CompoundButto
 
     public void logOut(View view)
     {
+        Intent intent = new Intent(this, MusicService.class);
+        stopService(intent);
+
         FirebaseAuth.getInstance().signOut();
         setResult(LOG_OUT);
         finish();

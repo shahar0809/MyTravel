@@ -37,27 +37,10 @@ public class MusicService extends Service
         return Service.START_NOT_STICKY;
     }
 
-    public void onPause()
-    {
-        if(mPlayer.isPlaying())
-        {
-            mPlayer.pause();
-        } else
-        {
-            mPlayer.start();
-        }
-    }
-
-    public boolean isPlaying()
-    {
-        return mPlayer.isPlaying();
-    }
-
-
     @Override
     public void onDestroy()
     {
-        mPlayer.stop();
+        mPlayer.pause();
         super.onDestroy();
     }
 }

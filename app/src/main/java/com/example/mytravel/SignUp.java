@@ -105,8 +105,7 @@ public class SignUp extends AppCompatActivity
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task)
                     {
-                        Log.i("error is :", task.getException().getMessage());
-                        Toast.makeText(SignUp.this, "createUserWithEmail:onComplete:" + task.isSuccessful(), Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(SignUp.this, "createUserWithEmail:onComplete:" + task.isSuccessful(), Toast.LENGTH_SHORT).show();
                         dialog.dismiss();
                         User user = new User(username_str,  email_str);
                         FirebaseMethods.generateUser(username_str, email_str);
@@ -116,10 +115,11 @@ public class SignUp extends AppCompatActivity
                             Toast.makeText(SignUp.this, "Authentication failed." + task.getException(),
                                     Toast.LENGTH_SHORT).show();
                         }
-                        else {
+                        else
+                            {
                             FirebaseUser currUser = FirebaseAuth.getInstance().getCurrentUser();
-                            UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder().setDisplayName(username_str).build();
-                            currUser.updateProfile(profileUpdates);
+                            //UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder().setDisplayName(username_str).build();
+                            //currUser.updateProfile(profileUpdates);
                             dialog.dismiss();
                             Intent intent = new Intent(SignUp.this, MainApp.class);
                             intent.putExtra("user", user);

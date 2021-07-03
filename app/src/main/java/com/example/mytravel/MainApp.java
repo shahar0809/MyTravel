@@ -86,11 +86,6 @@ public class MainApp extends AppCompatActivity implements OnMapReadyCallback,
         dialog = builder.create();
         dialog.show();
 
-        /* Extracting username from firebase auth */
-        username = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
-        TextView view = findViewById(R.id.username);
-        view.setText(username);
-
         initComponents();
 
         // Getting user from intent extras
@@ -274,7 +269,7 @@ public class MainApp extends AppCompatActivity implements OnMapReadyCallback,
             @Override
             public void onCancelled(@NonNull DatabaseError firebaseError)
             {
-                Toast.makeText(MainApp.this, "Can't load posts", Toast.LENGTH_LONG).show();
+                //Toast.makeText(MainApp.this, "Can't load posts", Toast.LENGTH_LONG).show();
                 Log.e("The read failed: ", firebaseError.getMessage());
                 dialog.dismiss();
             }
@@ -334,7 +329,7 @@ public class MainApp extends AppCompatActivity implements OnMapReadyCallback,
         /* Return to activity after logging out -> redirect to main activity */
         else if (requestCode == SETTINGS && resultCode == SettingsActivity.LOG_OUT)
         {
-            Intent intent = new Intent(this, Login.class);
+            Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
             finish();
         }
