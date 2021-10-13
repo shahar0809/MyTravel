@@ -13,6 +13,6 @@ The application also alows users to follow other users.
 - Add notification when followed user uploads posts
 - Migrate to firestore
 
-## Technlogical information
+## Database Usage
 The application was written in Java in an Android environment. It stores all the data in Firebase Realtime Database and Firebase Storage, and manages the users using Firebase Authentication.
 The design of the application is based on Android Material.
